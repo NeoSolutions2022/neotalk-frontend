@@ -1,4 +1,4 @@
-import { History, Home, LogOut, Settings, Translate } from "lucide-react";
+import { History, Home, LogOut, Settings, Languages } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -12,7 +12,7 @@ import {
 
 const menuItems = [
   { title: "Home", icon: Home, url: "/dashboard" },
-  { title: "Tradução em tempo real", icon: Translate, url: "/dashboard/translate" },
+  { title: "Tradução em tempo real", icon: Languages, url: "/dashboard/translate" },
   { title: "Histórico", icon: History, url: "/dashboard/history" },
   { title: "Configurações", icon: Settings, url: "/dashboard/settings" },
   { title: "Sair", icon: LogOut, url: "/logout" },

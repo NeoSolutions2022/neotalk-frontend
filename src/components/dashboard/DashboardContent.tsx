@@ -1,12 +1,12 @@
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { History, Settings, Translate } from "lucide-react";
+import { History, Settings, Languages } from "lucide-react";
 
 const cards = [
   {
     title: "Nova Tradução",
     description: "Inicie uma nova tradução em tempo real",
-    icon: Translate,
+    icon: Languages,
     url: "/dashboard/translate",
   },
   {
