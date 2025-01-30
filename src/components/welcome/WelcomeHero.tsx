@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Google, LogIn, UserPlus } from "lucide-react";
+import { LogIn, UserPlus, Mail } from "lucide-react";
 
 const WelcomeHero = () => {
   return (
@@ -75,7 +75,7 @@ const WelcomeHero = () => {
             size="lg"
             className="w-full sm:w-auto border border-gray-200 text-gray-700 hover:bg-gray-50"
           >
-            <Google className="mr-2 h-5 w-5" />
+            <Mail className="mr-2 h-5 w-5" />
             Google
           </Button>
         </div>
