@@ -77,3 +77,40 @@
 .typing-indicator span:nth-child(3) {
   animation-delay: 0.4s;
 }
+
+/* Mobile-specific styles */
+@media (max-width: 768px) {
+  .mobile-layout {
+    @apply flex flex-col h-screen relative;
+  }
+
+  .mobile-chat-area {
+    @apply flex-1 overflow-y-auto pb-32;
+  }
+
+  .mobile-avatar {
+    @apply fixed bottom-32 right-0 w-32 h-32 transition-all duration-300 ease-in-out;
+  }
+
+  .mobile-avatar.expanded {
+    @apply fixed inset-0 w-full h-[40vh] bg-black/50 z-50;
+  }
+
+  .mobile-controls {
+    @apply fixed bottom-0 left-0 right-0 bg-background border-t p-4 z-40;
+  }
+
+  .mobile-scroll-button {
+    @apply fixed bottom-36 right-4 rounded-full p-2 bg-primary text-white shadow-lg
+           hover:bg-primary/90 transition-colors duration-200;
+  }
+
+  .mobile-suggestions {
+    @apply grid grid-cols-2 gap-2 mb-4;
+  }
+
+  .mobile-suggestion-button {
+    @apply px-3 py-2 text-sm rounded-full bg-accent/50 text-foreground
+           hover:bg-accent transition-colors duration-200;
+  }
+}

@@ -1,5 +1,6 @@
 import { MessageCircle, Users, Languages } from "lucide-react";
 import { Button } from "./ui/button";
+import { useMobile } from "@/hooks/use-mobile";
 
 interface InteractionPanelProps {
   onSuggestionClick: (suggestion: string) => void;
@@ -15,6 +16,7 @@ export const InteractionPanel = ({
     "Vocês atendem aos sábados?",
     "Posso marcar um horário online?",
   ];
+  const isMobile = useMobile();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,6 +27,35 @@ export const InteractionPanel = ({
       input.value = "";
     }
   };
+
+  if (isMobile) {
+    return (
+      <div className="space-y-4">
+        <div className="mobile-suggestions">
+          {suggestions.map((suggestion) => (
+            <button
+              key={suggestion}
+              className="mobile-suggestion-button"
+              onClick={() => onSuggestionClick(suggestion)}
+            >
+              {suggestion}
+            </button>
+          ))}
+        </div>
+        <form onSubmit={handleSubmit} className="flex gap-2">
+          <input
+            type="text"
+            name="message"
+            placeholder="Digite sua mensagem..."
+            className="flex-1 h-10 rounded-md border border-input bg-background px-3 py-2 text-sm"
+          />
+          <Button type="submit" className="bg-primary text-white">
+            Enviar
+          </Button>
+        </form>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col h-full border-r bg-background">
