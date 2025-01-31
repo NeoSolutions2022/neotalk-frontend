@@ -1,13 +1,23 @@
 import { Maximize2, Minimize2 } from "lucide-react";
 import { Button } from "./ui/button";
 import { useState } from "react";
+import { TurnMode } from "@/types";
 
 interface AvatarPanelProps {
   currentMessage?: string;
+  turnMode: TurnMode;
+  isTranslating: boolean;
 }
 
-export const AvatarPanel = ({ currentMessage }: AvatarPanelProps) => {
+export const AvatarPanel = ({ currentMessage, turnMode, isTranslating }: AvatarPanelProps) => {
   const [isExpanded, setIsExpanded] = useState(true);
+
+  const getTranslationText = () => {
+    if (!isTranslating) return null;
+    return turnMode === "hearing" 
+      ? "Traduzindo para Libras..." 
+      : "Traduzindo para Áudio...";
+  };
 
   return (
     <div className="flex flex-col h-full border-l bg-background">
@@ -31,7 +41,11 @@ export const AvatarPanel = ({ currentMessage }: AvatarPanelProps) => {
           {currentMessage ? (
             <div className="text-center space-y-4">
               <p className="text-muted-foreground">{currentMessage}</p>
-              <p className="text-sm text-primary">Traduzindo para Libras...</p>
+              {isTranslating && (
+                <p className="text-sm text-primary animate-pulse">
+                  {getTranslationText()}
+                </p>
+              )}
             </div>
           ) : (
             <p className="text-muted-foreground text-center">
