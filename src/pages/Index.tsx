@@ -8,7 +8,6 @@ const Index = () => {
       <DocSidebar />
       <main className="md:ml-64 p-8">
         <div className="max-w-4xl mx-auto space-y-12">
-          {/* Introduction Section */}
           <section id="introduction" className="space-y-6">
             <h1 className="text-4xl font-bold text-neotalk-dark">NeoTalk Platform API</h1>
             <p className="text-lg text-gray-600">
@@ -235,17 +234,17 @@ const Index = () => {
                 <Card className="p-6">
                   <h4 className="text-xl font-semibold text-neotalk-dark mb-4">OAuth 2.0</h4>
                   <p className="text-gray-600 mb-4">
-                    Para integrações avançadas, suportamos OAuth 2.0 com fluxo Client Credentials.
+                    Para integrações avançadas, a API do NeoTalk suporta OAuth 2.0 com fluxo Client Credentials.
                   </p>
                   <pre className="bg-gray-50 p-3 rounded-lg text-sm overflow-x-auto">
-                    POST /oauth/token
-                    Content-Type: application/json
-                    
-                    {
-                      "client_id": "SEU_CLIENT_ID",
-                      "client_secret": "SEU_CLIENT_SECRET",
-                      "grant_type": "client_credentials"
-                    }
+{`POST /oauth/token
+Content-Type: application/json
+
+{
+  "client_id": "SEU_CLIENT_ID",
+  "client_secret": "SEU_CLIENT_SECRET",
+  "grant_type": "client_credentials"
+}`}
                   </pre>
                 </Card>
               </div>
