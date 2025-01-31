@@ -1,6 +1,6 @@
 import { MessageCircle, Users, Languages } from "lucide-react";
 import { Button } from "./ui/button";
-import { useMobile } from "@/hooks/use-mobile";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface InteractionPanelProps {
   onSuggestionClick: (suggestion: string) => void;
@@ -16,7 +16,7 @@ export const InteractionPanel = ({
     "Vocês atendem aos sábados?",
     "Posso marcar um horário online?",
   ];
-  const isMobile = useMobile();
+  const isMobile = useIsMobile();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

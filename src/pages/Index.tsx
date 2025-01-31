@@ -6,7 +6,7 @@ import { TurnToggle } from "@/components/TurnToggle";
 import { Message, TurnMode } from "@/types";
 import { ArrowDown, ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useMobile } from "@/hooks/use-mobile";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const Index = () => {
   const [messages, setMessages] = useState<Message[]>([
@@ -23,7 +23,7 @@ const Index = () => {
   const [turnMode, setTurnMode] = useState<TurnMode>("hearing");
   const [isAvatarExpanded, setIsAvatarExpanded] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
-  const isMobile = useMobile();
+  const isMobile = useIsMobile();
 
   const handleSuggestionClick = (suggestion: string) => {
     setCurrentMessage(suggestion);
