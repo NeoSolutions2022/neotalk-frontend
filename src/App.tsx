@@ -11,6 +11,7 @@ import Dashboard from "./pages/Dashboard";
 import Translate from "./pages/Translate";
 import History from "./pages/History";
 import Settings from "./pages/Settings";
+import Support from "./pages/Support";
 import NotFound from "./pages/NotFound";
 import ServerError from "./pages/ServerError";
 import WelcomeConfirmation from "./pages/WelcomeConfirmation";
@@ -33,6 +34,7 @@ const App = () => (
           <Route path="/dashboard/translate" element={<Translate />} />
           <Route path="/dashboard/history" element={<History />} />
           <Route path="/dashboard/settings" element={<Settings />} />
+          <Route path="/dashboard/support" element={<Support />} />
           <Route path="/500" element={<ServerError />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
