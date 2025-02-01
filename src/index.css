@@ -36,6 +36,5 @@
 
   html {
     scroll-behavior: smooth;
-    scroll-padding-top: 100px; /* Add padding to prevent section headers from being hidden under fixed elements */
   }
 }

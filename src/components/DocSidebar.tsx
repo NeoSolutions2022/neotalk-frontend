@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -34,76 +34,54 @@ const navigation: NavItem[] = [
       { title: "Integração com Vídeos e Streaming", href: "#video-integration" },
     ],
   },
+  {
+    title: "Exemplos de Requisição e Resposta",
+    href: "#examples",
+  },
+  {
+    title: "Erros e Respostas",
+    href: "#errors",
+  },
+  {
+    title: "Limites de Uso e Rate Limits",
+    href: "#limits",
+  },
+  {
+    title: "Boas Práticas para Desenvolvedores",
+    href: "#best-practices",
+  },
+  {
+    title: "FAQ e Suporte",
+    href: "#support",
+  },
 ];
 
 const DocSidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("#introduction");
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const sections = document.querySelectorAll("section[id]");
-      const scrollPosition = window.scrollY;
-
-      // Create an array to store all section positions
-      const sectionPositions = Array.from(sections).map((section) => {
-        const element = section as HTMLElement;
-        return {
-          id: `#${element.id}`,
-          position: element.offsetTop - 150, // Adjusted offset for better detection
-        };
-      });
-
-      // Find the current section
-      const currentSection = sectionPositions.reduce((acc, section) => {
-        if (scrollPosition >= section.position) {
-          return section;
-        }
-        return acc;
-      }, sectionPositions[0]);
-
-      if (currentSection && currentSection.id !== activeSection) {
-        setActiveSection(currentSection.id);
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll(); // Initial check
-
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [activeSection]);
-
-  const scrollToSection = (href: string) => {
-    const element = document.querySelector(href);
-    if (element) {
-      // Use smooth scrolling with a custom duration
-      const elementPosition = (element as HTMLElement).offsetTop - 100;
-      window.scrollTo({
-        top: elementPosition,
-        behavior: "smooth",
-      });
-      setActiveSection(href);
-      setIsOpen(false);
-    }
-  };
+  const toggleSidebar = () => setIsOpen(!isOpen);
 
   const NavLink = ({ item, depth = 0 }: { item: NavItem; depth?: number }) => {
     const isActive = activeSection === item.href;
-    const hasActiveChild = item.items?.some((subItem) => activeSection === subItem.href);
 
     return (
       <div className={cn("flex flex-col", depth > 0 && "ml-4")}>
-        <button
-          onClick={() => scrollToSection(item.href)}
+        <a
+          href={item.href}
+          onClick={() => {
+            setActiveSection(item.href);
+            setIsOpen(false);
+          }}
           className={cn(
-            "py-2 px-4 text-sm transition-colors duration-200 rounded-lg text-left",
-            isActive || hasActiveChild
+            "py-2 px-4 text-sm transition-colors duration-200 rounded-lg",
+            isActive
               ? "bg-neotalk-blue text-white"
               : "text-neotalk-dark hover:bg-neotalk-light"
           )}
         >
           {item.title}
-        </button>
+        </a>
         {item.items?.map((subItem) => (
           <NavLink key={subItem.href} item={subItem} depth={depth + 1} />
         ))}
@@ -113,13 +91,15 @@ const DocSidebar = () => {
 
   return (
     <>
+      {/* Mobile Menu Button */}
       <button
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={toggleSidebar}
         className="fixed top-4 left-4 z-50 p-2 bg-white rounded-lg shadow-lg md:hidden"
       >
         {isOpen ? <X size={24} /> : <Menu size={24} />}
       </button>
 
+      {/* Sidebar */}
       <aside
         className={cn(
           "fixed top-0 left-0 z-40 h-full w-64 bg-white shadow-lg transition-transform duration-300 ease-in-out transform md:translate-x-0",
@@ -140,10 +120,11 @@ const DocSidebar = () => {
         </div>
       </aside>
 
+      {/* Overlay for mobile */}
       {isOpen && (
         <div
           className="fixed inset-0 bg-black bg-opacity-50 z-30 md:hidden"
-          onClick={() => setIsOpen(false)}
+          onClick={toggleSidebar}
         />
       )}
     </>
