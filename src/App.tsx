@@ -12,6 +12,7 @@ import Translate from "./pages/Translate";
 import History from "./pages/History";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
+import WelcomeConfirmation from "./pages/WelcomeConfirmation";
 
 const queryClient = new QueryClient();
 
@@ -26,6 +27,7 @@ const App = () => (
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/welcome" element={<WelcomeConfirmation />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/dashboard/translate" element={<Translate />} />
           <Route path="/dashboard/history" element={<History />} />
