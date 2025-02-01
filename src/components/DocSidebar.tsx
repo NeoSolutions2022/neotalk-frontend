@@ -43,32 +43,45 @@ const DocSidebar = () => {
   useEffect(() => {
     const handleScroll = () => {
       const sections = document.querySelectorAll("section[id]");
-      const scrollPosition = window.scrollY + 100;
+      const scrollPosition = window.scrollY;
 
-      sections.forEach((section) => {
-        const sectionTop = (section as HTMLElement).offsetTop;
-        const sectionHeight = (section as HTMLElement).offsetHeight;
-        const sectionId = `#${section.id}`;
-
-        if (
-          scrollPosition >= sectionTop &&
-          scrollPosition < sectionTop + sectionHeight
-        ) {
-          setActiveSection(sectionId);
-        }
+      // Create an array to store all section positions
+      const sectionPositions = Array.from(sections).map((section) => {
+        const element = section as HTMLElement;
+        return {
+          id: `#${element.id}`,
+          position: element.offsetTop - 150, // Adjusted offset for better detection
+        };
       });
+
+      // Find the current section
+      const currentSection = sectionPositions.reduce((acc, section) => {
+        if (scrollPosition >= section.position) {
+          return section;
+        }
+        return acc;
+      }, sectionPositions[0]);
+
+      if (currentSection && currentSection.id !== activeSection) {
+        setActiveSection(currentSection.id);
+      }
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll(); // Initial check
 
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [activeSection]);
 
   const scrollToSection = (href: string) => {
     const element = document.querySelector(href);
     if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
+      // Use smooth scrolling with a custom duration
+      const elementPosition = (element as HTMLElement).offsetTop - 100;
+      window.scrollTo({
+        top: elementPosition,
+        behavior: "smooth",
+      });
       setActiveSection(href);
       setIsOpen(false);
     }
@@ -76,6 +89,7 @@ const DocSidebar = () => {
 
   const NavLink = ({ item, depth = 0 }: { item: NavItem; depth?: number }) => {
     const isActive = activeSection === item.href;
+    const hasActiveChild = item.items?.some((subItem) => activeSection === subItem.href);
 
     return (
       <div className={cn("flex flex-col", depth > 0 && "ml-4")}>
@@ -83,7 +97,7 @@ const DocSidebar = () => {
           onClick={() => scrollToSection(item.href)}
           className={cn(
             "py-2 px-4 text-sm transition-colors duration-200 rounded-lg text-left",
-            isActive
+            isActive || hasActiveChild
               ? "bg-neotalk-blue text-white"
               : "text-neotalk-dark hover:bg-neotalk-light"
           )}
