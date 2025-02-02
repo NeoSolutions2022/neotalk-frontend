@@ -15,6 +15,7 @@ import Support from "./pages/Support";
 import NotFound from "./pages/NotFound";
 import ServerError from "./pages/ServerError";
 import WelcomeConfirmation from "./pages/WelcomeConfirmation";
+import Onboarding from "./pages/Onboarding";
 
 const queryClient = new QueryClient();
 
@@ -35,6 +36,7 @@ const App = () => (
           <Route path="/dashboard/history" element={<History />} />
           <Route path="/dashboard/settings" element={<Settings />} />
           <Route path="/dashboard/support" element={<Support />} />
+          <Route path="/dashboard/onboarding" element={<Onboarding />} />
           <Route path="/500" element={<ServerError />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
