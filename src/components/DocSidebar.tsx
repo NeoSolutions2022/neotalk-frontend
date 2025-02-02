@@ -32,6 +32,7 @@ const navigation: NavItem[] = [
       { title: "Tradução de Áudio e Texto para Libras", href: "#audio-text-translation" },
       { title: "Tradução de Libras para Texto e Áudio", href: "#libras-translation" },
       { title: "Integração com Vídeos e Streaming", href: "#video-integration" },
+      { title: "Webhooks e Notificações", href: "#webhooks" },
     ],
   },
   {

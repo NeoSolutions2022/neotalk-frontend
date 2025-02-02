@@ -1,6 +1,7 @@
 import AudioTextTranslation from "./endpoints/AudioTextTranslation";
 import LibrasTranslation from "./endpoints/LibrasTranslation";
 import VideoIntegration from "./endpoints/VideoIntegration";
+import Webhooks from "./endpoints/Webhooks";
 
 const Endpoints = () => {
   return (
@@ -9,6 +10,7 @@ const Endpoints = () => {
       <AudioTextTranslation />
       <LibrasTranslation />
       <VideoIntegration />
+      <Webhooks />
     </section>
   );
 };
