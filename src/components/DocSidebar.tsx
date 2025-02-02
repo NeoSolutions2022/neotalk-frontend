@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -60,28 +60,49 @@ const DocSidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("#introduction");
 
-  const toggleSidebar = () => setIsOpen(!isOpen);
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = document.querySelectorAll("section[id]");
+      let currentSection = "#introduction";
+
+      sections.forEach((section) => {
+        const rect = section.getBoundingClientRect();
+        if (rect.top <= 100 && rect.bottom >= 100) {
+          currentSection = `#${section.id}`;
+        }
+      });
+
+      setActiveSection(currentSection);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const scrollToSection = (href: string) => {
+    const element = document.querySelector(href);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+      setIsOpen(false);
+    }
+  };
 
   const NavLink = ({ item, depth = 0 }: { item: NavItem; depth?: number }) => {
     const isActive = activeSection === item.href;
 
     return (
       <div className={cn("flex flex-col", depth > 0 && "ml-4")}>
-        <a
-          href={item.href}
-          onClick={() => {
-            setActiveSection(item.href);
-            setIsOpen(false);
-          }}
+        <button
+          onClick={() => scrollToSection(item.href)}
           className={cn(
-            "py-2 px-4 text-sm transition-colors duration-200 rounded-lg",
+            "py-2 px-4 text-sm transition-colors duration-200 rounded-lg text-left",
             isActive
               ? "bg-neotalk-blue text-white"
               : "text-neotalk-dark hover:bg-neotalk-light"
           )}
         >
           {item.title}
-        </a>
+        </button>
         {item.items?.map((subItem) => (
           <NavLink key={subItem.href} item={subItem} depth={depth + 1} />
         ))}
@@ -91,15 +112,13 @@ const DocSidebar = () => {
 
   return (
     <>
-      {/* Mobile Menu Button */}
       <button
-        onClick={toggleSidebar}
+        onClick={() => setIsOpen(!isOpen)}
         className="fixed top-4 left-4 z-50 p-2 bg-white rounded-lg shadow-lg md:hidden"
       >
         {isOpen ? <X size={24} /> : <Menu size={24} />}
       </button>
 
-      {/* Sidebar */}
       <aside
         className={cn(
           "fixed top-0 left-0 z-40 h-full w-64 bg-white shadow-lg transition-transform duration-300 ease-in-out transform md:translate-x-0",
@@ -120,11 +139,10 @@ const DocSidebar = () => {
         </div>
       </aside>
 
-      {/* Overlay for mobile */}
       {isOpen && (
         <div
           className="fixed inset-0 bg-black bg-opacity-50 z-30 md:hidden"
-          onClick={toggleSidebar}
+          onClick={() => setIsOpen(false)}
         />
       )}
     </>
