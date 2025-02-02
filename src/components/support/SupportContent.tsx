@@ -81,21 +81,17 @@ export function SupportContent() {
     <SidebarInset>
       <div className="h-16 border-b flex items-center px-6 gap-6">
         <SidebarTrigger />
-        <h1 className="text-xl font-semibold text-neotalk-dark dark:text-neotalk-light">
-          Central de Ajuda
-        </h1>
+        <h1 className="text-xl font-semibold">Central de Ajuda</h1>
       </div>
       
       <div className="p-6 max-w-5xl mx-auto space-y-8">
         {/* Hero Section */}
         <div className="text-center space-y-4">
-          <h2 className="text-3xl font-bold text-neotalk-dark dark:text-neotalk-light">
-            Como podemos te ajudar?
-          </h2>
+          <h2 className="text-3xl font-bold">Como podemos te ajudar?</h2>
           <div className="max-w-2xl mx-auto relative">
-            <Search className="absolute left-3 top-3 h-5 w-5 text-neotalk-gray" />
+            <Search className="absolute left-3 top-3 h-5 w-5 text-muted-foreground" />
             <Input
-              className="pl-10 h-12 bg-white dark:bg-neotalk-dark border-neotalk-gray/20"
+              className="pl-10 h-12"
               placeholder="Digite sua dúvida..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -106,21 +102,14 @@ export function SupportContent() {
         {/* Categories */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {categories.map((category, index) => (
-            <Card 
-              key={index} 
-              className="hover:bg-neotalk-light/50 dark:hover:bg-neotalk-dark/50 transition-colors cursor-pointer border-neotalk-gray/20"
-            >
+            <Card key={index} className="hover:bg-accent/50 transition-colors cursor-pointer">
               <CardHeader className="flex flex-row items-center gap-4">
-                <div className="p-2 bg-neotalk-primary/10 rounded-lg text-neotalk-primary">
+                <div className="p-2 bg-primary/10 rounded-lg">
                   {category.icon}
                 </div>
                 <div>
-                  <CardTitle className="text-lg text-neotalk-dark dark:text-neotalk-light">
-                    {category.title}
-                  </CardTitle>
-                  <CardDescription className="text-neotalk-gray">
-                    {category.description}
-                  </CardDescription>
+                  <CardTitle className="text-lg">{category.title}</CardTitle>
+                  <CardDescription>{category.description}</CardDescription>
                 </div>
               </CardHeader>
             </Card>
@@ -129,83 +118,66 @@ export function SupportContent() {
 
         {/* FAQ Section */}
         <div className="space-y-4">
-          <h3 className="text-2xl font-semibold text-neotalk-dark dark:text-neotalk-light">
-            Perguntas Frequentes
-          </h3>
+          <h3 className="text-2xl font-semibold">Perguntas Frequentes</h3>
           <Accordion type="single" collapsible className="w-full">
             {faqs.map((faq, index) => (
               <AccordionItem key={index} value={`item-${index}`}>
-                <AccordionTrigger className="text-neotalk-dark dark:text-neotalk-light">
-                  {faq.question}
-                </AccordionTrigger>
-                <AccordionContent className="text-neotalk-gray">
-                  {faq.answer}
-                </AccordionContent>
+                <AccordionTrigger>{faq.question}</AccordionTrigger>
+                <AccordionContent>{faq.answer}</AccordionContent>
               </AccordionItem>
             ))}
           </Accordion>
-          <Button 
-            variant="outline" 
-            className="w-full border-neotalk-gray/20 hover:bg-neotalk-light dark:hover:bg-neotalk-dark"
-          >
+          <Button variant="outline" className="w-full">
             Ver todas as perguntas
           </Button>
         </div>
 
         {/* Contact Section */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <Card className="border-neotalk-gray/20">
+          <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-neotalk-dark dark:text-neotalk-light">
-                <MessageSquare className="h-5 w-5 text-neotalk-primary" />
+              <CardTitle className="flex items-center gap-2">
+                <MessageSquare className="h-5 w-5" />
                 Chat ao Vivo
               </CardTitle>
-              <CardDescription className="text-neotalk-gray">
+              <CardDescription>
                 Fale com um especialista em tempo real
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <Button className="w-full bg-neotalk-primary hover:bg-neotalk-primary/90">
-                Iniciar Chat
-              </Button>
+              <Button className="w-full">Iniciar Chat</Button>
             </CardContent>
           </Card>
 
-          <Card className="border-neotalk-gray/20">
+          <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-neotalk-dark dark:text-neotalk-light">
-                <Mail className="h-5 w-5 text-neotalk-primary" />
+              <CardTitle className="flex items-center gap-2">
+                <Mail className="h-5 w-5" />
                 E-mail
               </CardTitle>
-              <CardDescription className="text-neotalk-gray">
+              <CardDescription>
                 Envie um ticket para nossa equipe
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <Button 
-                variant="outline" 
-                className="w-full border-neotalk-gray/20 hover:bg-neotalk-light dark:hover:bg-neotalk-dark"
-              >
+              <Button variant="outline" className="w-full">
                 Enviar Ticket
               </Button>
             </CardContent>
           </Card>
 
-          <Card className="border-neotalk-gray/20">
+          <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-neotalk-dark dark:text-neotalk-light">
-                <Phone className="h-5 w-5 text-neotalk-primary" />
+              <CardTitle className="flex items-center gap-2">
+                <Phone className="h-5 w-5" />
                 WhatsApp
               </CardTitle>
-              <CardDescription className="text-neotalk-gray">
+              <CardDescription>
                 Suporte via mensagem no WhatsApp
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <Button 
-                variant="outline" 
-                className="w-full border-neotalk-gray/20 hover:bg-neotalk-light dark:hover:bg-neotalk-dark"
-              >
+              <Button variant="outline" className="w-full">
                 Abrir WhatsApp
               </Button>
             </CardContent>
@@ -213,23 +185,18 @@ export function SupportContent() {
         </div>
 
         {/* Community Section */}
-        <Card className="bg-neotalk-light/5 dark:bg-neotalk-dark/5 border-neotalk-gray/20">
+        <Card className="bg-primary/5">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-neotalk-dark dark:text-neotalk-light">
-              <ExternalLink className="h-5 w-5 text-neotalk-primary" />
+            <CardTitle className="flex items-center gap-2">
+              <ExternalLink className="h-5 w-5" />
               Comunidade NeoTalk
             </CardTitle>
-            <CardDescription className="text-neotalk-gray">
+            <CardDescription>
               Participe de nossa comunidade e conecte-se com outros usuários
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Button 
-              variant="outline" 
-              className="border-neotalk-gray/20 hover:bg-neotalk-light dark:hover:bg-neotalk-dark"
-            >
-              Acessar Fórum
-            </Button>
+            <Button variant="outline">Acessar Fórum</Button>
           </CardContent>
         </Card>
       </div>

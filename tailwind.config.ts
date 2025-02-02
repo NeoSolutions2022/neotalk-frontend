@@ -20,10 +20,10 @@ export default {
     extend: {
       colors: {
         neotalk: {
-          primary: "#9b87f5",
-          secondary: "#7E69AB",
-          dark: "#1A1F2C",
-          light: "#F1F0FB",
+          primary: "#007bff",
+          secondary: "#00adef",
+          dark: "#333333",
+          light: "#F1F1F1",
           gray: "#8E9196",
         },
         border: "hsl(var(--border))",
