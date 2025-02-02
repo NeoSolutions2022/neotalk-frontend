@@ -20,11 +20,16 @@ export default {
     extend: {
       colors: {
         neotalk: {
-          primary: "#007bff",
-          secondary: "#00adef",
-          dark: "#333333",
-          light: "#F1F1F1",
-          gray: "#8E9196",
+          primary: "#007bff",    // Main brand color
+          secondary: "#00adef",  // Secondary brand color
+          dark: "#333333",       // Dark text and backgrounds
+          light: "#F1F1F1",     // Light backgrounds
+          gray: "#8E9196",      // Neutral text
+          success: "#28a745",   // Success states
+          warning: "#ffc107",   // Warning states
+          error: "#dc3545",     // Error states
+          background: "#ffffff", // Default background
+          "background-alt": "#f8f9fa", // Alternative background
         },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -59,6 +64,11 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+      },
+      borderRadius: {
+        lg: "var(--radius)",
+        md: "calc(var(--radius) - 2px)",
+        sm: "calc(var(--radius) - 4px)",
       },
       keyframes: {
         "accordion-down": {
