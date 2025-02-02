@@ -12,7 +12,6 @@ import Translate from "./pages/Translate";
 import History from "./pages/History";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
-import ServerError from "./pages/ServerError";
 import WelcomeConfirmation from "./pages/WelcomeConfirmation";
 
 const queryClient = new QueryClient();
@@ -33,7 +32,6 @@ const App = () => (
           <Route path="/dashboard/translate" element={<Translate />} />
           <Route path="/dashboard/history" element={<History />} />
           <Route path="/dashboard/settings" element={<Settings />} />
-          <Route path="/500" element={<ServerError />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
