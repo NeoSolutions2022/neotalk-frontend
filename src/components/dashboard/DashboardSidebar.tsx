@@ -13,6 +13,7 @@ import {
   Users,
   HelpCircle,
   Key,
+  MessageSquare,
 } from "lucide-react";
 import {
   Sidebar,
@@ -30,6 +31,7 @@ const mainNavigation = [
   { title: "Home", icon: Home, url: "/dashboard" },
   { title: "Tradução em tempo real", icon: Languages, url: "/dashboard/translate" },
   { title: "Histórico", icon: History, url: "/dashboard/history" },
+  { title: "Avaliação de Traduções", icon: MessageSquare, url: "/dashboard/feedback" },
 ];
 
 const accountNavigation = [
@@ -41,7 +43,7 @@ const accountNavigation = [
 
 const extraFeatures = [
   { title: "Tutorial Interativo", icon: Rocket, url: "/dashboard/tutorial", comingSoon: true },
-  { title: "Feedback de Tradução", icon: ThumbsUp, url: "/dashboard/feedback", comingSoon: true },
+  { title: "Feedback de Tradução", icon: ThumbsUp, url: "/dashboard/feedback", comingSoon: false },
   { title: "Estatísticas de Uso", icon: BarChart, url: "/dashboard/stats", comingSoon: true },
   { title: "Notificações", icon: Bell, url: "/dashboard/notifications", comingSoon: true },
   { title: "Comunidade NeoTalk", icon: Users, url: "/dashboard/community", comingSoon: true },

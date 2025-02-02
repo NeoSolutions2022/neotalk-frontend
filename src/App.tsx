@@ -16,6 +16,7 @@ import NotFound from "./pages/NotFound";
 import ServerError from "./pages/ServerError";
 import WelcomeConfirmation from "./pages/WelcomeConfirmation";
 import Onboarding from "./pages/Onboarding";
+import Feedback from "./pages/Feedback";
 
 const queryClient = new QueryClient();
 
@@ -37,6 +38,7 @@ const App = () => (
           <Route path="/dashboard/settings" element={<Settings />} />
           <Route path="/dashboard/support" element={<Support />} />
           <Route path="/dashboard/onboarding" element={<Onboarding />} />
+          <Route path="/dashboard/feedback" element={<Feedback />} />
           <Route path="/500" element={<ServerError />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
