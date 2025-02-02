@@ -34,10 +34,13 @@ import {
   Bell,
   Trash2,
   Save,
+  LogOut,
 } from "lucide-react";
+import { LogoutDialog } from "./LogoutDialog";
 
 export function SettingsContent() {
   const { toast } = useToast();
+  const [showLogoutDialog, setShowLogoutDialog] = useState(false);
   const [settings, setSettings] = useState({
     name: "John Doe",
     email: "john@example.com",
@@ -65,7 +68,6 @@ export function SettingsContent() {
         <h1 className="text-xl font-semibold">Configurações da Conta</h1>
       </div>
       <div className="p-6 space-y-8 max-w-3xl mx-auto">
-        {/* Dados Pessoais */}
         <section className="space-y-4">
           <h2 className="text-lg font-semibold flex items-center gap-2">
             <User className="h-5 w-5" />
@@ -89,8 +91,7 @@ export function SettingsContent() {
             <Button variant="outline">Alterar Senha</Button>
           </div>
         </section>
-
-        {/* Acessibilidade */}
+        
         <section className="space-y-4">
           <h2 className="text-lg font-semibold">Acessibilidade</h2>
           <div className="space-y-4">
@@ -147,8 +148,7 @@ export function SettingsContent() {
             </div>
           </div>
         </section>
-
-        {/* Configurações de Tradução */}
+        
         <section className="space-y-4">
           <h2 className="text-lg font-semibold flex items-center gap-2">
             <Languages className="h-5 w-5" />
@@ -205,8 +205,7 @@ export function SettingsContent() {
             </div>
           </div>
         </section>
-
-        {/* Notificações */}
+        
         <section className="space-y-4">
           <h2 className="text-lg font-semibold flex items-center gap-2">
             <Bell className="h-5 w-5" />
@@ -241,7 +240,7 @@ export function SettingsContent() {
         {/* Gerenciamento da Conta */}
         <section className="space-y-4">
           <h2 className="text-lg font-semibold">Gerenciamento da Conta</h2>
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between flex-wrap gap-4">
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <Button variant="destructive">
@@ -265,13 +264,28 @@ export function SettingsContent() {
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
-            <Button onClick={handleSave}>
-              <Save className="h-4 w-4 mr-2" />
-              Salvar Alterações
-            </Button>
+            <div className="flex gap-4">
+              <Button
+                variant="outline"
+                onClick={() => setShowLogoutDialog(true)}
+              >
+                <LogOut className="h-4 w-4 mr-2" />
+                Sair da Conta
+              </Button>
+              <Button onClick={handleSave}>
+                <Save className="h-4 w-4 mr-2" />
+                Salvar Alterações
+              </Button>
+            </div>
           </div>
         </section>
       </div>
+
+      <LogoutDialog
+        open={showLogoutDialog}
+        onOpenChange={setShowLogoutDialog}
+        userEmail={settings.email}
+      />
     </SidebarInset>
   );
 }
