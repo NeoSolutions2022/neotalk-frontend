@@ -3,6 +3,7 @@ import Introduction from "@/components/docs/Introduction";
 import Versioning from "@/components/docs/Versioning";
 import Authentication from "@/components/docs/Authentication";
 import Endpoints from "@/components/docs/Endpoints";
+import Examples from "@/components/docs/Examples";
 import Errors from "@/components/docs/Errors";
 import RateLimits from "@/components/docs/RateLimits";
 import BestPractices from "@/components/docs/BestPractices";
@@ -18,6 +19,7 @@ const Index = () => {
           <Versioning />
           <Authentication />
           <Endpoints />
+          <Examples />
           <Errors />
           <RateLimits />
           <BestPractices />
