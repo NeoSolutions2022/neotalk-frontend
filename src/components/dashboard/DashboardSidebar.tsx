@@ -25,13 +25,14 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 
 const mainNavigation = [
   { title: "Home", icon: Home, url: "/dashboard" },
   { title: "Tradução em tempo real", icon: Languages, url: "/dashboard/translate" },
   { title: "Histórico", icon: History, url: "/dashboard/history" },
   { title: "Avaliação de Traduções", icon: MessageSquare, url: "/dashboard/feedback" },
+  { title: "Minhas Estatísticas", icon: BarChart, url: "/dashboard/statistics" },
 ];
 
 const accountNavigation = [
@@ -44,7 +45,6 @@ const accountNavigation = [
 const extraFeatures = [
   { title: "Tutorial Interativo", icon: Rocket, url: "/dashboard/tutorial", comingSoon: true },
   { title: "Feedback de Tradução", icon: ThumbsUp, url: "/dashboard/feedback", comingSoon: false },
-  { title: "Estatísticas de Uso", icon: BarChart, url: "/dashboard/stats", comingSoon: true },
   { title: "Notificações", icon: Bell, url: "/dashboard/notifications", comingSoon: true },
   { title: "Comunidade NeoTalk", icon: Users, url: "/dashboard/community", comingSoon: true },
   { title: "Suporte", icon: HelpCircle, url: "/dashboard/support" },
