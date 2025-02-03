@@ -127,16 +127,20 @@ const DocSidebar = () => {
           isOpen ? "translate-x-0" : "-translate-x-full"
         )}
       >
-        <div className="p-4">
-          <img
-            src="/lovable-uploads/e027ab75-56fd-4365-b9da-c6ffee6e7e85.png"
-            alt="NeoTalk Logo"
-            className="h-8 mb-8"
-          />
-          <nav className="space-y-1">
-            {navigation.map((item) => (
-              <NavLink key={item.href} item={item} />
-            ))}
+        <div className="h-full flex flex-col">
+          <div className="p-4">
+            <img
+              src="/lovable-uploads/e027ab75-56fd-4365-b9da-c6ffee6e7e85.png"
+              alt="NeoTalk Logo"
+              className="h-8 mb-8"
+            />
+          </div>
+          <nav className="flex-1 overflow-y-auto px-4 pb-4">
+            <div className="space-y-1">
+              {navigation.map((item) => (
+                <NavLink key={item.href} item={item} />
+              ))}
+            </div>
           </nav>
         </div>
       </aside>
