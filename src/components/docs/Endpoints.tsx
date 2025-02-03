@@ -2,6 +2,7 @@ import AudioTextTranslation from "./endpoints/AudioTextTranslation";
 import LibrasTranslation from "./endpoints/LibrasTranslation";
 import VideoIntegration from "./endpoints/VideoIntegration";
 import Webhooks from "./endpoints/Webhooks";
+import UserManagement from "./endpoints/UserManagement";
 
 const Endpoints = () => {
   return (
@@ -11,6 +12,7 @@ const Endpoints = () => {
       <LibrasTranslation />
       <VideoIntegration />
       <Webhooks />
+      <UserManagement />
     </section>
   );
 };
