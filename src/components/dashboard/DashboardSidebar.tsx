@@ -12,7 +12,6 @@ import {
   Bell,
   Users,
   HelpCircle,
-  Key,
   BookOpen,
 } from "lucide-react";
 import {
@@ -37,9 +36,9 @@ const accountNavigation = [
 ];
 
 const extraFeatures = [
-  { title: "Tutorial Interativo", icon: BookOpen, url: "/dashboard/tutorial", comingSoon: true },
+  { title: "Tutorial Interativo", icon: BookOpen, url: "/dashboard/onboarding" },
   { title: "Feedback de Tradução", icon: ThumbsUp, url: "/dashboard/feedback" },
-  { title: "Comunidade NeoTalk", icon: Users, url: "/dashboard/community", comingSoon: true },
+  { title: "Comunidade", icon: Users, url: "/dashboard/community" },
   { title: "Suporte", icon: HelpCircle, url: "/dashboard/support" },
   { title: "Sair", icon: LogOut, url: "/logout" },
 ];
