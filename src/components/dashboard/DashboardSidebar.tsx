@@ -33,6 +33,7 @@ const mainNavigation = [
   { title: "Histórico", icon: History, url: "/dashboard/history" },
   { title: "Avaliação de Traduções", icon: MessageSquare, url: "/dashboard/feedback" },
   { title: "Minhas Estatísticas", icon: BarChart, url: "/dashboard/statistics" },
+  { title: "Notificações", icon: Bell, url: "/dashboard/notifications" },
 ];
 
 const accountNavigation = [

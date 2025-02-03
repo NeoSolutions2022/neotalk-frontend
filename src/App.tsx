@@ -18,6 +18,7 @@ import WelcomeConfirmation from "./pages/WelcomeConfirmation";
 import Onboarding from "./pages/Onboarding";
 import Feedback from "./pages/Feedback";
 import Statistics from "./pages/Statistics";
+import Notifications from "./pages/Notifications";
 
 const queryClient = new QueryClient();
 
@@ -41,6 +42,7 @@ const App = () => (
           <Route path="/dashboard/onboarding" element={<Onboarding />} />
           <Route path="/dashboard/feedback" element={<Feedback />} />
           <Route path="/dashboard/statistics" element={<Statistics />} />
+          <Route path="/dashboard/notifications" element={<Notifications />} />
           <Route path="/500" element={<ServerError />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
