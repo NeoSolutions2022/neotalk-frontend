@@ -61,7 +61,7 @@ export function TopicList({ filter }: TopicListProps) {
                   {topic.title}
                 </h3>
                 {topic.solved && (
-                  <Badge variant="success" className="bg-green-500">
+                  <Badge variant="secondary" className="bg-green-500 hover:bg-green-600 text-white">
                     Resolvido
                   </Badge>
                 )}
