@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
@@ -237,7 +238,6 @@ export function SettingsContent() {
           </div>
         </section>
 
-        {/* Gerenciamento da Conta */}
         <section className="space-y-4">
           <h2 className="text-lg font-semibold">Gerenciamento da Conta</h2>
           <div className="flex items-center justify-between flex-wrap gap-4">

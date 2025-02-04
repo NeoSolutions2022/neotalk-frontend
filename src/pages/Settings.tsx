@@ -1,6 +1,7 @@
+
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
-import { PricingPlans } from "@/components/pricing/PricingPlans";
+import { SettingsContent } from "@/components/settings/SettingsContent";
 
 export default function Settings() {
   return (
@@ -8,7 +9,7 @@ export default function Settings() {
       <div className="min-h-screen flex w-full bg-background">
         <DashboardSidebar />
         <main className="flex-1 overflow-y-auto">
-          <PricingPlans />
+          <SettingsContent />
         </main>
       </div>
     </SidebarProvider>
