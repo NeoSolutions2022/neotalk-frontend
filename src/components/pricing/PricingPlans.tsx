@@ -1,3 +1,4 @@
+```typescript
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -42,6 +43,7 @@ const plans = [
     features: [
       "Tudo do Plano Profissional",
       "Acesso à API para integração",
+      "Acesso às ferramentas extras (Escanear e Traduzir e Plugin Web)",
       "Suporte prioritário",
     ],
     cta: "Assinar Agora",
@@ -50,8 +52,7 @@ const plans = [
   {
     name: "Enterprise",
     description: "Para grandes empresas",
-    price: "R$ 2.997,00",
-    period: "/mês",
+    price: "Sob Consulta",
     icon: Crown,
     features: [
       "Tudo do Plano Empresarial",
@@ -173,3 +174,4 @@ export function PricingPlans() {
     </div>
   );
 }
+```
