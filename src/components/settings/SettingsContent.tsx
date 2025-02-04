@@ -1,7 +1,7 @@
+
 import { useState } from "react";
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
@@ -12,46 +12,47 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
 import { useToast } from "@/components/ui/use-toast";
 import {
-  User,
-  Moon,
-  Sun,
+  Languages,
   Type,
   Contrast,
-  Languages,
-  Bell,
-  Trash2,
+  Moon,
+  Sun,
   Save,
-  LogOut,
+  Globe,
+  Video,
+  Key,
+  Shield,
 } from "lucide-react";
-import { LogoutDialog } from "./LogoutDialog";
 
 export function SettingsContent() {
   const { toast } = useToast();
-  const [showLogoutDialog, setShowLogoutDialog] = useState(false);
   const [settings, setSettings] = useState({
-    name: "John Doe",
-    email: "john@example.com",
+    // Interface Language
+    interfaceLanguage: "pt-BR",
+    translationLanguages: ["libras", "asl"],
+    dataset: "general",
+
+    // Avatar & Translation
+    translationSpeed: 50,
+    avatar: "default",
+    expressiveness: 50,
+    
+    // Accessibility
     darkMode: false,
     fontSize: "medium",
     highContrast: false,
-    dataset: "general",
-    translationSpeed: 50,
-    avatar: "default",
-    emailNotifications: true,
-    featureUpdates: true,
+    closedCaptions: true,
+    
+    // API & Integrations
+    apiEnabled: false,
+    streamingEnabled: false,
+    elearningEnabled: false,
+    
+    // Privacy & Security
+    saveHistory: true,
+    dataUsage: true,
   });
 
   const handleSave = () => {
@@ -65,35 +66,112 @@ export function SettingsContent() {
     <SidebarInset>
       <div className="h-16 border-b flex items-center px-6 gap-6">
         <SidebarTrigger />
-        <h1 className="text-xl font-semibold">Configurações da Conta</h1>
+        <h1 className="text-xl font-semibold">Configurações do Sistema</h1>
       </div>
       <div className="p-6 space-y-8 max-w-3xl mx-auto">
+        {/* Idioma e Região */}
         <section className="space-y-4">
           <h2 className="text-lg font-semibold flex items-center gap-2">
-            <User className="h-5 w-5" />
-            Dados Pessoais
+            <Globe className="h-5 w-5" />
+            Idioma e Região
           </h2>
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="name">Nome</Label>
-              <Input
-                id="name"
-                value={settings.name}
-                onChange={(e) =>
-                  setSettings({ ...settings, name: e.target.value })
+              <Label>Idioma da Interface</Label>
+              <Select
+                value={settings.interfaceLanguage}
+                onValueChange={(value) =>
+                  setSettings({ ...settings, interfaceLanguage: value })
                 }
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="pt-BR">Português (Brasil)</SelectItem>
+                  <SelectItem value="en-US">English (US)</SelectItem>
+                  <SelectItem value="es">Español</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label>Dataset de Tradução</Label>
+              <Select
+                value={settings.dataset}
+                onValueChange={(value) =>
+                  setSettings({ ...settings, dataset: value })
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="general">Geral</SelectItem>
+                  <SelectItem value="health">Saúde</SelectItem>
+                  <SelectItem value="education">Educação</SelectItem>
+                  <SelectItem value="technology">Tecnologia</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+        </section>
+
+        {/* Avatar e Tradução */}
+        <section className="space-y-4">
+          <h2 className="text-lg font-semibold flex items-center gap-2">
+            <Video className="h-5 w-5" />
+            Avatar e Tradução
+          </h2>
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label>Modelo do Avatar</Label>
+              <Select
+                value={settings.avatar}
+                onValueChange={(value) =>
+                  setSettings({ ...settings, avatar: value })
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="default">Padrão</SelectItem>
+                  <SelectItem value="professional">Profissional</SelectItem>
+                  <SelectItem value="casual">Casual</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label>Velocidade da Tradução</Label>
+              <Slider
+                value={[settings.translationSpeed]}
+                onValueChange={([value]) =>
+                  setSettings({ ...settings, translationSpeed: value })
+                }
+                max={100}
+                step={1}
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="email">E-mail</Label>
-              <Input id="email" value={settings.email} disabled />
+              <Label>Expressividade do Avatar</Label>
+              <Slider
+                value={[settings.expressiveness]}
+                onValueChange={([value]) =>
+                  setSettings({ ...settings, expressiveness: value })
+                }
+                max={100}
+                step={1}
+              />
             </div>
-            <Button variant="outline">Alterar Senha</Button>
           </div>
         </section>
-        
+
+        {/* Acessibilidade */}
         <section className="space-y-4">
-          <h2 className="text-lg font-semibold">Acessibilidade</h2>
+          <h2 className="text-lg font-semibold flex items-center gap-2">
+            <Type className="h-5 w-5" />
+            Acessibilidade
+          </h2>
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
@@ -113,10 +191,7 @@ export function SettingsContent() {
               />
             </div>
             <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <Type className="h-5 w-5" />
-                <Label>Tamanho da Fonte</Label>
-              </div>
+              <Label>Tamanho da Fonte</Label>
               <Select
                 value={settings.fontSize}
                 onValueChange={(value) =>
@@ -146,146 +221,99 @@ export function SettingsContent() {
                 }
               />
             </div>
-          </div>
-        </section>
-        
-        <section className="space-y-4">
-          <h2 className="text-lg font-semibold flex items-center gap-2">
-            <Languages className="h-5 w-5" />
-            Configurações de Tradução
-          </h2>
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <Label>Dataset</Label>
-              <Select
-                value={settings.dataset}
-                onValueChange={(value) =>
-                  setSettings({ ...settings, dataset: value })
-                }
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="general">Geral</SelectItem>
-                  <SelectItem value="health">Saúde</SelectItem>
-                  <SelectItem value="education">Educação</SelectItem>
-                  <SelectItem value="technology">Tecnologia</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-2">
-              <Label>Velocidade da Tradução</Label>
-              <Slider
-                value={[settings.translationSpeed]}
-                onValueChange={([value]) =>
-                  setSettings({ ...settings, translationSpeed: value })
-                }
-                max={100}
-                step={1}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label>Avatar 3D</Label>
-              <Select
-                value={settings.avatar}
-                onValueChange={(value) =>
-                  setSettings({ ...settings, avatar: value })
-                }
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="default">Padrão</SelectItem>
-                  <SelectItem value="professional">Profissional</SelectItem>
-                  <SelectItem value="casual">Casual</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-        </section>
-        
-        <section className="space-y-4">
-          <h2 className="text-lg font-semibold flex items-center gap-2">
-            <Bell className="h-5 w-5" />
-            Notificações
-          </h2>
-          <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <Label htmlFor="email-notifications">Notificações por E-mail</Label>
+              <Label htmlFor="closed-captions">Legendas para Surdos Oralizados</Label>
               <Switch
-                id="email-notifications"
-                checked={settings.emailNotifications}
+                id="closed-captions"
+                checked={settings.closedCaptions}
                 onCheckedChange={(checked) =>
-                  setSettings({ ...settings, emailNotifications: checked })
+                  setSettings({ ...settings, closedCaptions: checked })
+                }
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* Integrações e API */}
+        <section className="space-y-4">
+          <h2 className="text-lg font-semibold flex items-center gap-2">
+            <Key className="h-5 w-5" />
+            Integrações e API
+          </h2>
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <Label htmlFor="api-enabled">API do NeoTalk</Label>
+              <Switch
+                id="api-enabled"
+                checked={settings.apiEnabled}
+                onCheckedChange={(checked) =>
+                  setSettings({ ...settings, apiEnabled: checked })
                 }
               />
             </div>
             <div className="flex items-center justify-between">
-              <Label htmlFor="feature-updates">
-                Atualizações de Funcionalidades
+              <Label htmlFor="streaming-enabled">Integração com Streaming</Label>
+              <Switch
+                id="streaming-enabled"
+                checked={settings.streamingEnabled}
+                onCheckedChange={(checked) =>
+                  setSettings({ ...settings, streamingEnabled: checked })
+                }
+              />
+            </div>
+            <div className="flex items-center justify-between">
+              <Label htmlFor="elearning-enabled">Integração com EAD</Label>
+              <Switch
+                id="elearning-enabled"
+                checked={settings.elearningEnabled}
+                onCheckedChange={(checked) =>
+                  setSettings({ ...settings, elearningEnabled: checked })
+                }
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* Privacidade e Segurança */}
+        <section className="space-y-4">
+          <h2 className="text-lg font-semibold flex items-center gap-2">
+            <Shield className="h-5 w-5" />
+            Privacidade e Segurança
+          </h2>
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <Label htmlFor="save-history">Salvar Histórico de Tradução</Label>
+              <Switch
+                id="save-history"
+                checked={settings.saveHistory}
+                onCheckedChange={(checked) =>
+                  setSettings({ ...settings, saveHistory: checked })
+                }
+              />
+            </div>
+            <div className="flex items-center justify-between">
+              <Label htmlFor="data-usage">
+                Permitir Uso de Dados para Melhorias
               </Label>
               <Switch
-                id="feature-updates"
-                checked={settings.featureUpdates}
+                id="data-usage"
+                checked={settings.dataUsage}
                 onCheckedChange={(checked) =>
-                  setSettings({ ...settings, featureUpdates: checked })
+                  setSettings({ ...settings, dataUsage: checked })
                 }
               />
             </div>
           </div>
         </section>
 
-        {/* Gerenciamento da Conta */}
-        <section className="space-y-4">
-          <h2 className="text-lg font-semibold">Gerenciamento da Conta</h2>
-          <div className="flex items-center justify-between flex-wrap gap-4">
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button variant="destructive">
-                  <Trash2 className="h-4 w-4 mr-2" />
-                  Excluir Conta
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Excluir conta?</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    Esta ação não pode ser desfeita. Isso excluirá permanentemente
-                    sua conta e removerá seus dados de nossos servidores.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                  <AlertDialogAction className="bg-destructive text-destructive-foreground">
-                    Excluir
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
-            <div className="flex gap-4">
-              <Button
-                variant="outline"
-                onClick={() => setShowLogoutDialog(true)}
-              >
-                <LogOut className="h-4 w-4 mr-2" />
-                Sair da Conta
-              </Button>
-              <Button onClick={handleSave}>
-                <Save className="h-4 w-4 mr-2" />
-                Salvar Alterações
-              </Button>
-            </div>
-          </div>
-        </section>
+        {/* Save Button */}
+        <div className="flex justify-end">
+          <Button onClick={handleSave}>
+            <Save className="h-4 w-4 mr-2" />
+            Salvar Alterações
+          </Button>
+        </div>
       </div>
-
-      <LogoutDialog
-        open={showLogoutDialog}
-        onOpenChange={setShowLogoutDialog}
-        userEmail={settings.email}
-      />
     </SidebarInset>
   );
 }
