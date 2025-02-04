@@ -1,3 +1,4 @@
+
 import {
   History,
   Home,
@@ -33,7 +34,7 @@ const mainNavigation = [
 const accountNavigation = [
   { title: "Meu Perfil", icon: User, url: "/dashboard/profile" },
   { title: "Configurações", icon: Settings, url: "/dashboard/settings" },
-  { title: "Planos e Assinaturas", icon: CreditCard, url: "/dashboard/settings#subscription" },
+  { title: "Planos e Assinaturas", icon: CreditCard, url: "/dashboard/pricing" },
 ];
 
 const extraFeatures = [
