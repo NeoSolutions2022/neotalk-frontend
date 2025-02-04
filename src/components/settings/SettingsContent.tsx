@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
@@ -25,13 +24,14 @@ import {
   Key,
   Shield,
 } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
 
 export function SettingsContent() {
   const { toast } = useToast();
   const [settings, setSettings] = useState({
     // Interface Language
     interfaceLanguage: "pt-BR",
-    translationLanguages: ["libras", "asl"],
+    translationLanguages: ["libras"],  // Changed to single array for all languages
     dataset: "general",
 
     // Avatar & Translation
@@ -94,8 +94,62 @@ export function SettingsContent() {
                 </SelectContent>
               </Select>
             </div>
+
+            {/* New: Language Translation Selection */}
             <div className="space-y-2">
-              <Label>Dataset de Tradução</Label>
+              <Label>Idiomas de Tradução</Label>
+              <div className="grid gap-2">
+                <div className="flex items-center space-x-2">
+                  <Checkbox 
+                    id="libras"
+                    checked={settings.translationLanguages.includes('libras')}
+                    onCheckedChange={(checked) => {
+                      setSettings({
+                        ...settings,
+                        translationLanguages: checked 
+                          ? [...settings.translationLanguages, 'libras']
+                          : settings.translationLanguages.filter(lang => lang !== 'libras')
+                      });
+                    }}
+                  />
+                  <Label htmlFor="libras">Libras (Língua Brasileira de Sinais)</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox 
+                    id="asl"
+                    checked={settings.translationLanguages.includes('asl')}
+                    onCheckedChange={(checked) => {
+                      setSettings({
+                        ...settings,
+                        translationLanguages: checked 
+                          ? [...settings.translationLanguages, 'asl']
+                          : settings.translationLanguages.filter(lang => lang !== 'asl')
+                      });
+                    }}
+                  />
+                  <Label htmlFor="asl">ASL (American Sign Language)</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox 
+                    id="fsl"
+                    checked={settings.translationLanguages.includes('fsl')}
+                    onCheckedChange={(checked) => {
+                      setSettings({
+                        ...settings,
+                        translationLanguages: checked 
+                          ? [...settings.translationLanguages, 'fsl']
+                          : settings.translationLanguages.filter(lang => lang !== 'fsl')
+                      });
+                    }}
+                  />
+                  <Label htmlFor="fsl">FSL (French Sign Language)</Label>
+                </div>
+              </div>
+            </div>
+
+            {/* Enhanced Dataset Selection */}
+            <div className="space-y-2">
+              <Label>Dataset de Tradução e Regionalização</Label>
               <Select
                 value={settings.dataset}
                 onValueChange={(value) =>
@@ -106,12 +160,20 @@ export function SettingsContent() {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="general">Geral</SelectItem>
+                  <SelectItem value="general">Geral (Brasil)</SelectItem>
+                  <SelectItem value="south">Região Sul</SelectItem>
+                  <SelectItem value="northeast">Região Nordeste</SelectItem>
+                  <SelectItem value="north">Região Norte</SelectItem>
+                  <SelectItem value="southeast">Região Sudeste</SelectItem>
+                  <SelectItem value="midwest">Região Centro-Oeste</SelectItem>
                   <SelectItem value="health">Saúde</SelectItem>
                   <SelectItem value="education">Educação</SelectItem>
                   <SelectItem value="technology">Tecnologia</SelectItem>
                 </SelectContent>
               </Select>
+              <p className="text-sm text-muted-foreground mt-1">
+                O dataset selecionado influencia nas adaptações linguísticas e culturais da tradução.
+              </p>
             </div>
           </div>
         </section>
