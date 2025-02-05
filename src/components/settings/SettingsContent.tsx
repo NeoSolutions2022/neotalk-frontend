@@ -23,16 +23,18 @@ import {
   Video,
   Key,
   Shield,
+  RotateCcw,
 } from "lucide-react";
-import { Checkbox } from "@/components/ui/checkbox";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 export function SettingsContent() {
   const { toast } = useToast();
   const [settings, setSettings] = useState({
     // Interface Language
     interfaceLanguage: "pt-BR",
-    translationLanguages: ["libras"],  // Changed to single array for all languages
-    dataset: "general",
+    translationLanguage: "libras",  // Changed to single string
+    region: "general",
+    segment: "general",
 
     // Avatar & Translation
     translationSpeed: 50,
@@ -59,6 +61,31 @@ export function SettingsContent() {
     toast({
       title: "Configurações salvas",
       description: "Suas preferências foram atualizadas com sucesso.",
+    });
+  };
+
+  const handleResetDefaults = () => {
+    setSettings({
+      interfaceLanguage: "pt-BR",
+      translationLanguage: "libras",
+      region: "general",
+      segment: "general",
+      translationSpeed: 50,
+      avatar: "default",
+      expressiveness: 50,
+      darkMode: false,
+      fontSize: "medium",
+      highContrast: false,
+      closedCaptions: true,
+      apiEnabled: false,
+      streamingEnabled: false,
+      elearningEnabled: false,
+      saveHistory: true,
+      dataUsage: true,
+    });
+    toast({
+      title: "Configurações restauradas",
+      description: "Todas as configurações foram restauradas para os valores padrão.",
     });
   };
 
@@ -95,85 +122,75 @@ export function SettingsContent() {
               </Select>
             </div>
 
-            {/* New: Language Translation Selection */}
+            {/* Language Translation Selection */}
             <div className="space-y-2">
-              <Label>Idiomas de Tradução</Label>
-              <div className="grid gap-2">
+              <Label>Idioma de Tradução</Label>
+              <RadioGroup
+                value={settings.translationLanguage}
+                onValueChange={(value) =>
+                  setSettings({ ...settings, translationLanguage: value })
+                }
+                className="grid gap-2"
+              >
                 <div className="flex items-center space-x-2">
-                  <Checkbox 
-                    id="libras"
-                    checked={settings.translationLanguages.includes('libras')}
-                    onCheckedChange={(checked) => {
-                      setSettings({
-                        ...settings,
-                        translationLanguages: checked 
-                          ? [...settings.translationLanguages, 'libras']
-                          : settings.translationLanguages.filter(lang => lang !== 'libras')
-                      });
-                    }}
-                  />
+                  <RadioGroupItem value="libras" id="libras" />
                   <Label htmlFor="libras">Libras (Língua Brasileira de Sinais)</Label>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <Checkbox 
-                    id="asl"
-                    checked={settings.translationLanguages.includes('asl')}
-                    onCheckedChange={(checked) => {
-                      setSettings({
-                        ...settings,
-                        translationLanguages: checked 
-                          ? [...settings.translationLanguages, 'asl']
-                          : settings.translationLanguages.filter(lang => lang !== 'asl')
-                      });
-                    }}
-                  />
+                  <RadioGroupItem value="asl" id="asl" />
                   <Label htmlFor="asl">ASL (American Sign Language)</Label>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <Checkbox 
-                    id="fsl"
-                    checked={settings.translationLanguages.includes('fsl')}
-                    onCheckedChange={(checked) => {
-                      setSettings({
-                        ...settings,
-                        translationLanguages: checked 
-                          ? [...settings.translationLanguages, 'fsl']
-                          : settings.translationLanguages.filter(lang => lang !== 'fsl')
-                      });
-                    }}
-                  />
+                  <RadioGroupItem value="fsl" id="fsl" />
                   <Label htmlFor="fsl">FSL (French Sign Language)</Label>
                 </div>
-              </div>
+              </RadioGroup>
             </div>
 
-            {/* Enhanced Dataset Selection */}
+            {/* Region Selection */}
             <div className="space-y-2">
-              <Label>Dataset de Tradução e Regionalização</Label>
+              <Label>Região</Label>
               <Select
-                value={settings.dataset}
+                value={settings.region}
                 onValueChange={(value) =>
-                  setSettings({ ...settings, dataset: value })
+                  setSettings({ ...settings, region: value })
                 }
               >
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="general">Geral (Brasil)</SelectItem>
-                  <SelectItem value="south">Região Sul</SelectItem>
-                  <SelectItem value="northeast">Região Nordeste</SelectItem>
-                  <SelectItem value="north">Região Norte</SelectItem>
-                  <SelectItem value="southeast">Região Sudeste</SelectItem>
-                  <SelectItem value="midwest">Região Centro-Oeste</SelectItem>
-                  <SelectItem value="health">Saúde</SelectItem>
-                  <SelectItem value="education">Educação</SelectItem>
-                  <SelectItem value="technology">Tecnologia</SelectItem>
+                  <SelectItem value="general">Brasil (Geral)</SelectItem>
+                  <SelectItem value="north">Norte</SelectItem>
+                  <SelectItem value="northeast">Nordeste</SelectItem>
+                  <SelectItem value="midwest">Centro-Oeste</SelectItem>
+                  <SelectItem value="southeast">Sudeste</SelectItem>
+                  <SelectItem value="south">Sul</SelectItem>
                 </SelectContent>
               </Select>
-              <p className="text-sm text-muted-foreground mt-1">
-                O dataset selecionado influencia nas adaptações linguísticas e culturais da tradução.
-              </p>
+            </div>
+
+            {/* Segment Selection */}
+            <div className="space-y-2">
+              <Label>Segmento de Aplicação</Label>
+              <Select
+                value={settings.segment}
+                onValueChange={(value) =>
+                  setSettings({ ...settings, segment: value })
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="general">Geral (Sem Segmentação)</SelectItem>
+                  <SelectItem value="education">Educação</SelectItem>
+                  <SelectItem value="health">Saúde</SelectItem>
+                  <SelectItem value="technology">Tecnologia</SelectItem>
+                  <SelectItem value="government">Governo</SelectItem>
+                  <SelectItem value="corporate">Corporativo</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           </div>
         </section>
@@ -368,8 +385,12 @@ export function SettingsContent() {
           </div>
         </section>
 
-        {/* Save Button */}
-        <div className="flex justify-end">
+        {/* Save and Reset Buttons */}
+        <div className="flex justify-end gap-4">
+          <Button variant="outline" onClick={handleResetDefaults}>
+            <RotateCcw className="h-4 w-4 mr-2" />
+            Restaurar Padrões
+          </Button>
           <Button onClick={handleSave}>
             <Save className="h-4 w-4 mr-2" />
             Salvar Alterações
