@@ -21,11 +21,9 @@ import {
   Clock,
   Target,
   Award,
-  Loader2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { Skeleton } from "@/components/ui/skeleton";
 
 // Mock data - In a real app, this would come from your backend
 const translationTypeData = [
@@ -48,68 +46,24 @@ const COLORS = ["#4F46E5", "#10B981", "#F59E0B"];
 
 export function StatisticsPanel() {
   const { toast } = useToast();
-  const [isLoading, setIsLoading] = React.useState(false);
   const totalHours = 12;
   const totalTranslations = 104;
   const improvementPercentage = 20;
   const goalProgress = 75;
 
-  const handleExportData = async (format: "pdf" | "csv") => {
-    setIsLoading(true);
-    try {
-      // Simulating API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      toast({
-        title: "Exportando dados",
-        description: `Seus dados serão exportados em formato ${format.toUpperCase()}`,
-      });
-    } catch (error) {
-      toast({
-        title: "Erro ao exportar",
-        description: "Não foi possível exportar seus dados. Tente novamente.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(false);
-    }
+  const handleExportData = (format: "pdf" | "csv") => {
+    toast({
+      title: "Exportando dados",
+      description: `Seus dados serão exportados em formato ${format.toUpperCase()}`,
+    });
   };
 
-  const handleSubscribeToReport = async () => {
-    setIsLoading(true);
-    try {
-      // Simulating API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      toast({
-        title: "Inscrição realizada",
-        description: "Você receberá relatórios mensais por e-mail",
-      });
-    } catch (error) {
-      toast({
-        title: "Erro na inscrição",
-        description: "Não foi possível realizar sua inscrição. Tente novamente.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(false);
-    }
+  const handleSubscribeToReport = () => {
+    toast({
+      title: "Inscrição realizada",
+      description: "Você receberá relatórios mensais por e-mail",
+    });
   };
-
-  if (isLoading) {
-    return (
-      <div className="p-6 space-y-6">
-        <Skeleton className="h-8 w-64" />
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {[1, 2, 3].map((i) => (
-            <Skeleton key={i} className="h-32" />
-          ))}
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <Skeleton className="h-[400px]" />
-          <Skeleton className="h-[400px]" />
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="p-6 space-y-6">
@@ -120,39 +74,20 @@ export function StatisticsPanel() {
             variant="outline"
             size="sm"
             onClick={() => handleExportData("pdf")}
-            disabled={isLoading}
           >
-            {isLoading ? (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            ) : (
-              <Download className="mr-2 h-4 w-4" />
-            )}
+            <Download className="mr-2 h-4 w-4" />
             Exportar PDF
           </Button>
           <Button
             variant="outline"
             size="sm"
             onClick={() => handleExportData("csv")}
-            disabled={isLoading}
           >
-            {isLoading ? (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            ) : (
-              <Download className="mr-2 h-4 w-4" />
-            )}
+            <Download className="mr-2 h-4 w-4" />
             Exportar CSV
           </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleSubscribeToReport}
-            disabled={isLoading}
-          >
-            {isLoading ? (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            ) : (
-              <Mail className="mr-2 h-4 w-4" />
-            )}
+          <Button variant="outline" size="sm" onClick={handleSubscribeToReport}>
+            <Mail className="mr-2 h-4 w-4" />
             Receber Relatório
           </Button>
         </div>
@@ -160,7 +95,7 @@ export function StatisticsPanel() {
 
       {/* Resumo Geral */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card className="p-4 hover:shadow-lg transition-shadow">
+        <Card className="p-4">
           <div className="flex items-center gap-2">
             <Clock className="h-5 w-5 text-primary" />
             <h3 className="font-semibold">Tempo Total</h3>
@@ -169,7 +104,7 @@ export function StatisticsPanel() {
           <p className="text-sm text-muted-foreground">este mês</p>
         </Card>
 
-        <Card className="p-4 hover:shadow-lg transition-shadow">
+        <Card className="p-4">
           <div className="flex items-center gap-2">
             <TrendingUp className="h-5 w-5 text-green-500" />
             <h3 className="font-semibold">Total de Traduções</h3>
@@ -180,7 +115,7 @@ export function StatisticsPanel() {
           </p>
         </Card>
 
-        <Card className="p-4 hover:shadow-lg transition-shadow">
+        <Card className="p-4">
           <div className="flex items-center gap-2">
             <Award className="h-5 w-5 text-yellow-500" />
             <h3 className="font-semibold">Ranking</h3>
