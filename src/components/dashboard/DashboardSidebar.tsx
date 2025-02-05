@@ -12,7 +12,6 @@ import {
   Bell,
   Users,
   HelpCircle,
-  Key,
   BookOpen,
 } from "lucide-react";
 import {
@@ -21,6 +20,7 @@ import {
 } from "@/components/ui/sidebar";
 import { useToast } from "@/hooks/use-toast";
 import { SidebarSection } from "./sidebar/SidebarSection";
+import { useNavigate } from "react-router-dom";
 
 const mainNavigation = [
   { title: "Home", icon: Home, url: "/dashboard" },
@@ -41,20 +41,33 @@ const extraFeatures = [
   { title: "Feedback de Tradução", icon: ThumbsUp, url: "/dashboard/feedback" },
   { title: "Comunidade NeoTalk", icon: Users, url: "/dashboard/community", comingSoon: true },
   { title: "Suporte", icon: HelpCircle, url: "/dashboard/support" },
-  { title: "Sair", icon: LogOut, url: "/logout" },
+  { title: "Sair", icon: LogOut, url: "/login" },
 ];
 
 export function DashboardSidebar() {
   const { toast } = useToast();
+  const navigate = useNavigate();
 
-  const handleItemClick = (e: React.MouseEvent, item: { title: string; comingSoon?: boolean }) => {
+  const handleItemClick = (e: React.MouseEvent, item: { title: string; url: string; comingSoon?: boolean }) => {
+    e.preventDefault();
+    
     if (item.comingSoon) {
-      e.preventDefault();
       toast({
         title: "Em breve",
         description: `A funcionalidade "${item.title}" estará disponível em breve!`,
       });
+      return;
     }
+
+    if (item.title === "Sair") {
+      // Add logout logic here
+      toast({
+        title: "Logout",
+        description: "Você foi desconectado com sucesso!",
+      });
+    }
+    
+    navigate(item.url);
   };
 
   return (
