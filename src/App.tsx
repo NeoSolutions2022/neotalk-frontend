@@ -22,39 +22,42 @@ import Notifications from "./pages/Notifications";
 import Community from "./pages/Community";
 import Pricing from "./pages/Pricing";
 import Profile from "./pages/Profile";
+import React from 'react';
 
 const queryClient = new QueryClient();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/welcome" element={<WelcomeConfirmation />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/dashboard/translate" element={<Translate />} />
-          <Route path="/dashboard/history" element={<History />} />
-          <Route path="/dashboard/settings" element={<Settings />} />
-          <Route path="/dashboard/pricing" element={<Pricing />} />
-          <Route path="/dashboard/support" element={<Support />} />
-          <Route path="/dashboard/onboarding" element={<Onboarding />} />
-          <Route path="/dashboard/feedback" element={<Feedback />} />
-          <Route path="/dashboard/statistics" element={<Statistics />} />
-          <Route path="/dashboard/notifications" element={<Notifications />} />
-          <Route path="/dashboard/community" element={<Community />} />
-          <Route path="/dashboard/profile" element={<Profile />} />
-          <Route path="/500" element={<ServerError />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+const App: React.FC = () => {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/welcome" element={<WelcomeConfirmation />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/dashboard/translate" element={<Translate />} />
+            <Route path="/dashboard/history" element={<History />} />
+            <Route path="/dashboard/settings" element={<Settings />} />
+            <Route path="/dashboard/pricing" element={<Pricing />} />
+            <Route path="/dashboard/support" element={<Support />} />
+            <Route path="/dashboard/onboarding" element={<Onboarding />} />
+            <Route path="/dashboard/feedback" element={<Feedback />} />
+            <Route path="/dashboard/statistics" element={<Statistics />} />
+            <Route path="/dashboard/notifications" element={<Notifications />} />
+            <Route path="/dashboard/community" element={<Community />} />
+            <Route path="/dashboard/profile" element={<Profile />} />
+            <Route path="/500" element={<ServerError />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </QueryClientProvider>
+  );
+};
 
 export default App;
