@@ -1,3 +1,4 @@
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -11,6 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { LogOut, HelpCircle } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface LogoutDialogProps {
   open: boolean;
@@ -18,10 +20,16 @@ interface LogoutDialogProps {
   userEmail?: string;
 }
 
-export function LogoutDialog({ open, onOpenChange, userEmail }: LogoutDialogProps) {
+export function LogoutDialog({
+  open,
+  onOpenChange,
+  userEmail,
+}: LogoutDialogProps) {
+  const { logout } = useAuth();
+
   const handleLogout = () => {
-    // Implement actual logout logic here
-    console.log("Logging out...");
+    logout();
+    onOpenChange(false);
   };
 
   return (
@@ -46,10 +54,7 @@ export function LogoutDialog({ open, onOpenChange, userEmail }: LogoutDialogProp
         <AlertDialogFooter className="flex-col space-y-4 sm:space-y-0">
           <div className="flex w-full flex-col gap-4 sm:flex-row sm:justify-end">
             <AlertDialogCancel asChild>
-              <Button
-                variant="outline"
-                className="w-full sm:w-auto"
-              >
+              <Button variant="outline" className="w-full sm:w-auto">
                 Cancelar
               </Button>
             </AlertDialogCancel>

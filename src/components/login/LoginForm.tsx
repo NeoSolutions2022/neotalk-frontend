@@ -1,10 +1,10 @@
+
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Mail, Lock, Eye, EyeOff } from "lucide-react";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -16,16 +16,25 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
 
 const formSchema = z.object({
   email: z.string().email("Email inválido"),
-  password: z.string().min(1, "Senha é obrigatória"),
+  password: z
+    .string()
+    .min(8, "A senha deve ter pelo menos 8 caracteres")
+    .regex(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+      "A senha deve conter letras maiúsculas, minúsculas, números e caracteres especiais"
+    ),
 });
 
 export function LoginForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [loginAttempts, setLoginAttempts] = useState(0);
   const { toast } = useToast();
+  const { login } = useAuth();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -36,14 +45,21 @@ export function LoginForm() {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    if (loginAttempts >= 5) {
+      toast({
+        variant: "destructive",
+        title: "Muitas tentativas de login",
+        description:
+          "Por segurança, aguarde alguns minutos antes de tentar novamente.",
+      });
+      return;
+    }
+
     setIsLoading(true);
     try {
-      console.log(values);
-      toast({
-        title: "Login realizado com sucesso!",
-        description: "Você será redirecionado para a página inicial.",
-      });
+      await login(values.email, values.password);
     } catch (error) {
+      setLoginAttempts((prev) => prev + 1);
       toast({
         variant: "destructive",
         title: "Erro ao fazer login",
@@ -74,6 +90,7 @@ export function LoginForm() {
                     placeholder="Digite seu email"
                     type="email"
                     className="pl-10"
+                    autoComplete="email"
                     {...field}
                   />
                 </div>
@@ -96,6 +113,7 @@ export function LoginForm() {
                     placeholder="Digite sua senha"
                     type={showPassword ? "text" : "password"}
                     className="pl-10 pr-10"
+                    autoComplete="current-password"
                     {...field}
                   />
                   <button
@@ -129,7 +147,7 @@ export function LoginForm() {
           <Button
             type="submit"
             className="w-full bg-neotalk-primary hover:bg-neotalk-primary/90"
-            disabled={isLoading}
+            disabled={isLoading || loginAttempts >= 5}
           >
             {isLoading ? "Entrando..." : "Entrar"}
           </Button>
