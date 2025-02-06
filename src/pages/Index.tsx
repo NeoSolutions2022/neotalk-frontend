@@ -1,3 +1,4 @@
+
 import DocSidebar from "@/components/DocSidebar";
 import Introduction from "@/components/docs/Introduction";
 import Versioning from "@/components/docs/Versioning";
@@ -14,7 +15,7 @@ const Index = () => {
     <div className="min-h-screen bg-neotalk-light">
       <DocSidebar />
       <main className="md:ml-64 p-8">
-        <div className="max-w-4xl mx-auto space-y-12">
+        <div className="max-w-4xl mx-auto space-y-16">
           <Introduction />
           <Versioning />
           <Authentication />

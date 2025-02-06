@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { NavigationMenu } from "./navigation/NavigationMenu";
+import { ScrollArea } from "./ui/scroll-area";
 
-interface NavItem {
+export interface NavItem {
   title: string;
   href: string;
   items?: NavItem[];
@@ -89,29 +91,6 @@ const DocSidebar = () => {
     }
   };
 
-  const NavLink = ({ item, depth = 0 }: { item: NavItem; depth?: number }) => {
-    const isActive = activeSection === item.href;
-
-    return (
-      <div className={cn("flex flex-col", depth > 0 && "ml-4")}>
-        <button
-          onClick={() => scrollToSection(item.href)}
-          className={cn(
-            "py-2 px-4 text-sm transition-colors duration-200 rounded-lg text-left",
-            isActive
-              ? "bg-neotalk-blue text-white"
-              : "text-neotalk-dark hover:bg-neotalk-light"
-          )}
-        >
-          {item.title}
-        </button>
-        {item.items?.map((subItem) => (
-          <NavLink key={subItem.href} item={subItem} depth={depth + 1} />
-        ))}
-      </div>
-    );
-  };
-
   return (
     <>
       <button
@@ -135,13 +114,15 @@ const DocSidebar = () => {
               className="h-8 mb-8"
             />
           </div>
-          <nav className="flex-1 overflow-y-auto px-4 pb-4">
-            <div className="space-y-1">
-              {navigation.map((item) => (
-                <NavLink key={item.href} item={item} />
-              ))}
-            </div>
-          </nav>
+          <ScrollArea className="flex-1 px-4 pb-4">
+            <nav>
+              <NavigationMenu 
+                navigation={navigation} 
+                activeSection={activeSection}
+                onSectionClick={scrollToSection}
+              />
+            </nav>
+          </ScrollArea>
         </div>
       </aside>
 
