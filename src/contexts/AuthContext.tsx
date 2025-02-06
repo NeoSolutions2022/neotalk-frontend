@@ -5,6 +5,7 @@ import { useToast } from "@/components/ui/use-toast";
 
 interface AuthContextType {
   isAuthenticated: boolean;
+  isLoading: boolean; // Added isLoading property
   user: UserType | null;
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
@@ -22,6 +23,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(true); // Added isLoading state
   const [user, setUser] = useState<UserType | null>(null);
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -37,17 +39,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const checkSession = () => {
-    const session = localStorage.getItem("session");
-    if (session) {
-      const parsedSession = JSON.parse(session);
-      const now = new Date().getTime();
-      if (now - parsedSession.lastActive < SESSION_TIMEOUT) {
-        setIsAuthenticated(true);
-        setUser(parsedSession.user);
-        resetSessionTimer();
-      } else {
-        logout();
+    setIsLoading(true);
+    try {
+      const session = localStorage.getItem("session");
+      if (session) {
+        const parsedSession = JSON.parse(session);
+        const now = new Date().getTime();
+        if (now - parsedSession.lastActive < SESSION_TIMEOUT) {
+          setIsAuthenticated(true);
+          setUser(parsedSession.user);
+          resetSessionTimer();
+        } else {
+          logout();
+        }
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -64,6 +71,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const login = async (email: string, password: string) => {
+    setIsLoading(true);
     try {
       // Simulate API call - replace with actual authentication
       const mockUser = {
@@ -82,6 +90,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         title: "Erro ao fazer login",
         description: "Email ou senha incorretos.",
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -99,7 +109,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, user, login, logout, checkSession }}
+      value={{ isAuthenticated, isLoading, user, login, logout, checkSession }}
     >
       {children}
     </AuthContext.Provider>
