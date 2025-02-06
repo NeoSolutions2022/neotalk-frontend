@@ -8,21 +8,22 @@ import { cn } from "@/lib/utils";
 const plans = [
   {
     name: "Free",
-    description: "Para experimentar a plataforma",
+    description: "Para usuários que desejam experimentar a plataforma",
     price: "Gratuito",
     icon: DollarSign,
     features: [
       "Tradução limitada de áudio/texto para Libras",
-      "Até 50 minutos/mês",
+      "Até 50 minutos/mês de uso",
       "Acesso básico à plataforma",
+      "1 tela/login/usuário",
     ],
     cta: "Experimente Gratuitamente",
     ctaVariant: "outline" as const,
   },
   {
     name: "Profissional",
-    description: "Para uso profissional",
-    price: "R$ 97,00",
+    description: "Para profissionais e autônomos",
+    price: "R$ 97,00*",
     period: "/mês",
     icon: Zap,
     popular: true,
@@ -30,7 +31,9 @@ const plans = [
       "Tradução ilimitada de áudio/texto para Libras",
       "Suporte padrão",
       "Acesso a todas as funcionalidades básicas",
+      "Acesso a apenas 1 tela/login/usuário",
     ],
+    footnote: "Gratuito para pessoas surdas*",
     cta: "Assinar Agora",
     ctaVariant: "default" as const,
   },
@@ -43,8 +46,9 @@ const plans = [
     features: [
       "Tudo do Plano Profissional",
       "Acesso à API para integração",
-      "Acesso às ferramentas extras (Escanear e Traduzir e Plugin Web)",
       "Suporte prioritário",
+      "Acesso às ferramentas extras (Escanear e Traduzir e Plugin Web)",
+      "Acesso para até 5 telas/logins/usuários",
     ],
     cta: "Assinar Agora",
     ctaVariant: "default" as const,
@@ -59,6 +63,7 @@ const plans = [
       "Personalização total da API",
       "Consultoria dedicada",
       "Suporte premium",
+      "Telas/logins/usuários ilimitados",
     ],
     cta: "Fale com um Especialista",
     ctaVariant: "default" as const,
@@ -124,6 +129,11 @@ export function PricingPlans() {
             <Button variant={plan.ctaVariant} className="w-full">
               {plan.cta}
             </Button>
+            {plan.footnote && (
+              <p className="mt-4 text-sm text-muted-foreground text-center">
+                {plan.footnote}
+              </p>
+            )}
           </Card>
         ))}
       </div>
