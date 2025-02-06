@@ -1,3 +1,4 @@
+
 import {
   History,
   Home,
@@ -17,10 +18,13 @@ import {
 import {
   Sidebar,
   SidebarContent,
+  SidebarInset,
+  SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { useToast } from "@/hooks/use-toast";
 import { SidebarSection } from "./sidebar/SidebarSection";
 import { useNavigate } from "react-router-dom";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const mainNavigation = [
   { title: "Home", icon: Home, url: "/dashboard" },
@@ -47,6 +51,7 @@ const extraFeatures = [
 export function DashboardSidebar() {
   const { toast } = useToast();
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
 
   const handleItemClick = (e: React.MouseEvent, item: { title: string; url: string; comingSoon?: boolean }) => {
     e.preventDefault();
@@ -72,6 +77,10 @@ export function DashboardSidebar() {
 
   return (
     <Sidebar>
+      <div className="h-16 border-b flex items-center px-6">
+        {isMobile && <SidebarTrigger />}
+        <span className="text-xl font-semibold">NeoTalk</span>
+      </div>
       <SidebarContent>
         <SidebarSection
           label="Navegação Principal"
