@@ -78,3 +78,120 @@
     scroll-padding-top: 2rem;
   }
 }
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 210 40% 98%;
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    --primary: 196 100% 44%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+
+    --radius: 0.75rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+.message-bubble {
+  @apply rounded-2xl px-4 py-2 max-w-[80%];
+}
+
+.message-bubble.user {
+  @apply bg-primary text-white ml-auto;
+}
+
+.message-bubble.system {
+  @apply bg-white text-foreground mr-auto;
+}
+
+.suggestion-button {
+  @apply w-full text-left px-4 py-3 rounded-lg hover:bg-accent transition-colors duration-200
+         border border-border text-foreground;
+}
+
+.typing-indicator {
+  @apply flex space-x-1 items-center text-muted-foreground text-sm;
+}
+
+.typing-indicator span {
+  @apply w-2 h-2 bg-muted-foreground rounded-full animate-bounce;
+}
+
+.typing-indicator span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.typing-indicator span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+/* Mobile-specific styles */
+@media (max-width: 768px) {
+  .mobile-layout {
+    @apply flex flex-col h-screen relative;
+  }
+
+  .mobile-chat-area {
+    @apply flex-1 overflow-y-auto pb-32;
+  }
+
+  .mobile-avatar {
+    @apply fixed bottom-32 right-0 w-32 h-32 transition-all duration-300 ease-in-out;
+  }
+
+  .mobile-avatar.expanded {
+    @apply fixed inset-0 w-full h-[40vh] bg-black/50 z-50;
+  }
+
+  .mobile-controls {
+    @apply fixed bottom-0 left-0 right-0 bg-background border-t p-4 z-40;
+  }
+
+  .mobile-scroll-button {
+    @apply fixed bottom-36 right-4 rounded-full p-2 bg-primary text-white shadow-lg
+           hover:bg-primary/90 transition-colors duration-200;
+  }
+
+  .mobile-suggestions {
+    @apply grid grid-cols-2 gap-2 mb-4;
+  }
+
+  .mobile-suggestion-button {
+    @apply px-3 py-2 text-sm rounded-full bg-accent/50 text-foreground
+           hover:bg-accent transition-colors duration-200;
+  }
+}
