@@ -1,4 +1,10 @@
-import { useState, useRef } from "react";
+import WelcomeHero from "@/components/welcome/WelcomeHero";
+
+const Index = () => {
+  return <WelcomeHero />;
+};
+
+export default Index;import { useState, useRef } from "react";
 import { InteractionPanel } from "@/components/InteractionPanel";
 import { ChatArea } from "@/components/ChatArea";
 import { AvatarPanel } from "@/components/AvatarPanel";
