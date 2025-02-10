@@ -1,8 +1,15 @@
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { LogIn, UserPlus, Mail } from "lucide-react";
 
 const WelcomeHero = () => {
+  const navigate = useNavigate();
+
+  const loginClick = () => {
+    navigate("/login");
+  }
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -44,6 +51,7 @@ const WelcomeHero = () => {
             variant="default"
             size="lg"
             className="w-full sm:w-auto bg-neotalk-primary hover:bg-neotalk-primary/90 text-white font-semibold px-8"
+            onClick={loginClick}
           >
             <LogIn className="mr-2 h-5 w-5" />
             Entrar
