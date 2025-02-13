@@ -29,7 +29,7 @@ export const ChatArea = ({ messages, isTyping }: ChatAreaProps) => {
         <h2 className="text-lg font-semibold">Área de Conversação</h2>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      <div className="flex-1 overflow-y-auto p-4">
         {messages.map((message) => (
           <div key={message.id} className="flex flex-col">
             <div className={`message-bubble ${message.sender}`}>

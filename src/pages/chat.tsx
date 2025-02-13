@@ -127,21 +127,24 @@ const Chat = () => {
   }
 
   return (
-    <div className="flex h-screen bg-background">
-      <div className="w-80">
-        <InteractionPanel
-          onSuggestionClick={handleSuggestionClick}
-          onSendMessage={handleSendMessage}
-        />
-      </div>
-      <div className="flex-1 flex flex-col">
+    <div className="flex h-screen bg-background w-100">
+      {/* Área de chat e controle principal */}
+      <div className="flex-1 flex flex-col relative">
         <div className="p-4 border-b bg-background">
           <TurnToggle currentTurn={turnMode} onToggle={handleTurnToggle} />
         </div>
-        <div className="flex-1">
+        <div className="flex-1 overflow-y-auto pb-[100px]">
           <ChatArea messages={messages} isTyping={isTyping} />
+          {/* Caixa flutuante para o InteractionPanel */}
+          <div className="fixed bottom-0 left-1/2 transform -translate-x-1/2 z-10 flex w-full">
+            <InteractionPanel
+              onSuggestionClick={handleSuggestionClick}
+              onSendMessage={handleSendMessage}
+            />
+          </div>
         </div>
       </div>
+      {/* Painel lateral de Avatar */}
       <div className="w-80">
         <AvatarPanel 
           currentMessage={currentMessage}
@@ -151,6 +154,7 @@ const Chat = () => {
       </div>
     </div>
   );
+  
 };
 
 export default Chat;
