@@ -16,11 +16,10 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoUrl }) => {
         className="absolute top-0 left-0 w-full h-full"
         style={{
           objectFit: "cover", 
-          pointerEvents: "none", 
-          transform: "scale(1.2)", // 🔥 Dá zoom no vídeo para remover bordas
+          pointerEvents: "none",  // 🔥 Dá zoom no vídeo para remover bordas
           transformOrigin: "center center"
         }}
-        src={`https://www.youtube.com/embed/${videoUrl}?autoplay=1&mute=1&loop=1&playlist=${videoUrl}&controls=0&modestbranding=1&showinfo=0&rel=0&playsinline=1&disablekb=1`}
+        src={`https://www.youtube.com/embed/${videoUrl}?autoplay=1&color=white&mute=1&loop=1&playlist=${videoUrl}&controls=0&modestbranding=0&showinfo=0&rel=0&playsinline=1&disablekb=1&enablejsapi=1`}
         frameBorder="0"
         allow="autoplay; encrypted-media; gyroscope; picture-in-picture"
         allowFullScreen

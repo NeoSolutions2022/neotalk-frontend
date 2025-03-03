@@ -2,6 +2,7 @@ import { Maximize2, Minimize2 } from "lucide-react";
 import { Button } from "./ui/button";
 import { useState } from "react";
 import { TurnMode } from "@/types";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface AvatarPanelProps {
   currentMessage?: string;
@@ -10,15 +11,9 @@ interface AvatarPanelProps {
   isTranslating: boolean;
 }
 
-export const AvatarPanel = ({ currentMessage, currentVideo, turnMode, isTranslating }: AvatarPanelProps) => {
+export const AvatarPanel = ({ currentVideo, turnMode, isTranslating }: AvatarPanelProps) => {
   const [isExpanded, setIsExpanded] = useState(true);
-
-  const getTranslationText = () => {
-    if (!isTranslating) return null;
-    return turnMode === "hearing" 
-      ? "Traduzindo para Libras..." 
-      : "Traduzindo para Áudio...";
-  };
+  const isMobile = useIsMobile(); // Detecta se está no mobile
 
   return (
     <div className="flex flex-col h-full border-l bg-background">
@@ -33,30 +28,22 @@ export const AvatarPanel = ({ currentMessage, currentVideo, turnMode, isTranslat
         </Button>
       </div>
 
-      <div className={`flex-1 ${isExpanded ? "" : "hidden"}`}>
-        <div className="relative w-full h-full overflow-hidden">
-          {currentVideo ? (
+      {/* 🔥 O vídeo agora usa aspect-ratio para se ajustar dinamicamente */}
+      <div className={`relative w-full ${isMobile ? "h-[75vh]" : "h-full"} flex justify-center`}>
+        {currentVideo ? (
+          <div className="relative w-full" style={{ paddingTop: "110%" }}> 
             <iframe
+              title="vimeo-player"
+              src={`https://player.vimeo.com/video/1062109672?h=965ced62e8?autoplay=1&loop=1&background=1&muted=1`}
               className="absolute top-0 left-0 w-full h-full"
-              style={{
-                width: "22.5vw",
-                height: "88vh",
-                position: "absolute",
-                top: "0",
-                paddingRight: "20px",
-                pointerEvents: "none", // 🔒 Bloqueia interação
-                borderRadius: "8px",
-              }}
-              src={`https://www.youtube.com/embed/${currentVideo}?autoplay=1&mute=1&loop=1&playlist=${currentVideo}&controls=0&modestbranding=1&showinfo=0&rel=0&playsinline=1&disablekb=1&fs=0&iv_load_policy=3`}
-              title="Avatar 3D"
               frameBorder="0"
-              allow="autoplay; encrypted-media"
+              allow="autoplay; fullscreen; picture-in-picture"
               allowFullScreen
-            />
-          ) : (
-            <p className="text-muted-foreground text-center">Avatar 3D será exibido aqui</p>
-          )}
-        </div>
+            ></iframe>
+          </div>
+        ) : (
+          <p className="text-muted-foreground text-center">Avatar 3D será exibido aqui</p>
+        )}
       </div>
     </div>
   );
