@@ -79,12 +79,7 @@ const Chat = () => {
     handleUserResponse(suggestion);
   };
 
-  const handleTurnToggle = () => {
-    setTurnMode((prev) => (prev === "hearing" ? "deaf" : "hearing"));
-    if (typeof navigator?.vibrate === "function") {
-      navigator.vibrate(200);
-    }
-  };
+  
 
   const scrollToBottom = () => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -94,9 +89,6 @@ const Chat = () => {
     return (
       <div className="mobile-layout">
         <div className="mobile-chat-area">
-          <div className="sticky top-0 p-4 border-b bg-background z-30">
-            <TurnToggle currentTurn={turnMode} onToggle={handleTurnToggle} />
-          </div>
           <ChatArea messages={messages} isTyping={isTyping} />
           <div ref={chatEndRef} />
         </div>
@@ -118,9 +110,7 @@ const Chat = () => {
           />
         </div>
 
-        <Button className="mobile-scroll-button" size="icon" onClick={scrollToBottom}>
-          <ArrowDown className="h-4 w-4" />
-        </Button>
+
 
         <div className="mobile-controls">
           <InteractionPanel
@@ -138,9 +128,7 @@ const Chat = () => {
   return (
     <div className="flex h-screen bg-background w-100">
       <div className="flex-1 flex flex-col relative">
-        <div className="p-4 border-b bg-background">
-          <TurnToggle currentTurn={turnMode} onToggle={handleTurnToggle} />
-        </div>
+
         <div className="flex-1 overflow-y-auto pb-[100px]">
           <ChatArea messages={messages} isTyping={isTyping} />
           <div className="fixed bottom-0 left-1/2 transform -translate-x-1/2 z-10 flex w-full">

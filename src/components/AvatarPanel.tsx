@@ -19,13 +19,7 @@ export const AvatarPanel = ({ currentVideo, turnMode, isTranslating }: AvatarPan
     <div className="flex flex-col h-full border-l bg-background">
       <div className="p-4 border-b flex justify-between items-center">
         <h2 className="text-lg font-semibold">Avatar 3D</h2>
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => setIsExpanded(!isExpanded)}
-        >
-          {isExpanded ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
-        </Button>
+
       </div>
 
       {/* 🔥 O vídeo agora usa aspect-ratio para se ajustar dinamicamente */}
