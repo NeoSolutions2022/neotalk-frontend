@@ -5,11 +5,12 @@ import { TurnMode } from "@/types";
 
 interface AvatarPanelProps {
   currentMessage?: string;
+  currentVideo?: string;
   turnMode: TurnMode;
   isTranslating: boolean;
 }
 
-export const AvatarPanel = ({ currentMessage, turnMode, isTranslating }: AvatarPanelProps) => {
+export const AvatarPanel = ({ currentMessage, currentVideo, turnMode, isTranslating }: AvatarPanelProps) => {
   const [isExpanded, setIsExpanded] = useState(true);
 
   const getTranslationText = () => {
@@ -28,29 +29,32 @@ export const AvatarPanel = ({ currentMessage, turnMode, isTranslating }: AvatarP
           size="icon"
           onClick={() => setIsExpanded(!isExpanded)}
         >
-          {isExpanded ? (
-            <Minimize2 className="h-4 w-4" />
-          ) : (
-            <Maximize2 className="h-4 w-4" />
-          )}
+          {isExpanded ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
         </Button>
       </div>
 
       <div className={`flex-1 ${isExpanded ? "" : "hidden"}`}>
-        <div className="h-full flex items-center justify-center bg-secondary/30 p-4">
-          {currentMessage ? (
-            <div className="text-center space-y-4">
-              <p className="text-muted-foreground">{currentMessage}</p>
-              {isTranslating && (
-                <p className="text-sm text-primary animate-pulse">
-                  {getTranslationText()}
-                </p>
-              )}
-            </div>
+        <div className="relative w-full h-full overflow-hidden">
+          {currentVideo ? (
+            <iframe
+              className="absolute top-0 left-0 w-full h-full"
+              style={{
+                width: "22.5vw",
+                height: "88vh",
+                position: "absolute",
+                top: "0",
+                paddingRight: "20px",
+                pointerEvents: "none", // 🔒 Bloqueia interação
+                borderRadius: "8px",
+              }}
+              src={`https://www.youtube.com/embed/${currentVideo}?autoplay=1&mute=1&loop=1&playlist=${currentVideo}&controls=0&modestbranding=1&showinfo=0&rel=0&playsinline=1&disablekb=1&fs=0&iv_load_policy=3`}
+              title="Avatar 3D"
+              frameBorder="0"
+              allow="autoplay; encrypted-media"
+              allowFullScreen
+            />
           ) : (
-            <p className="text-muted-foreground text-center">
-              Avatar 3D será exibido aqui
-            </p>
+            <p className="text-muted-foreground text-center">Avatar 3D será exibido aqui</p>
           )}
         </div>
       </div>

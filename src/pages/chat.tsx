@@ -3,18 +3,23 @@ import { InteractionPanel } from "@/components/InteractionPanel";
 import { ChatArea } from "@/components/ChatArea";
 import { AvatarPanel } from "@/components/AvatarPanel";
 import { TurnToggle } from "@/components/TurnToggle";
+import { chatFlow, ChatStep } from "@/config/chatFlow"; // Importando o fluxo do chat
 import { Message, TurnMode } from "@/types";
 import { ArrowDown, ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 const Chat = () => {
+  const [currentStep, setCurrentStep] = useState<keyof typeof chatFlow>("inicio");
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 1,
-      text: "Olá, como posso ajudar?",
+      text: chatFlow.inicio.message,
       sender: "system",
-      timestamp: "10:00",
+      timestamp: new Date().toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
     },
   ]);
   const [isTyping, setIsTyping] = useState(false);
@@ -25,51 +30,59 @@ const Chat = () => {
   const chatEndRef = useRef<HTMLDivElement>(null);
   const isMobile = useIsMobile();
 
-  const handleSuggestionClick = (suggestion: string) => {
-    setCurrentMessage(suggestion);
-    setIsTranslating(true);
-    // Simulate translation delay
-    setTimeout(() => {
-      setIsTranslating(false);
-      handleSendMessage(suggestion);
-    }, 2000);
-  };
-
-  const handleSendMessage = (text: string) => {
-    const newMessage: Message = {
-      id: Date.now(),
-      text,
-      sender: "user",
-      timestamp: new Date().toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-      }),
-    };
-
-    setMessages((prev) => [...prev, newMessage]);
-    setCurrentMessage(undefined);
-    setIsTyping(true);
-
-    // Simulate response
-    setTimeout(() => {
-      const response: Message = {
+  // ✅ Corrigido - Lógica para avançar no fluxo do chat
+  const handleUserResponse = (userInput: string) => {
+    setMessages((prev) => [
+      ...prev,
+      {
         id: Date.now(),
-        text: "Entendi sua mensagem. Como posso ajudar mais?",
-        sender: "system",
+        text: userInput,
+        sender: "user",
         timestamp: new Date().toLocaleTimeString([], {
           hour: "2-digit",
           minute: "2-digit",
         }),
-      };
-      setMessages((prev) => [...prev, response]);
+      },
+    ]);
+
+    setIsTyping(true);
+
+    setTimeout(() => {
+      const step: ChatStep = chatFlow[currentStep];
+      let nextStep = step.nextStep || null;
+
+      if (step.nextOptions) {
+        nextStep = step.nextOptions[userInput] || "inicio"; // Volta ao início se a opção for inválida
+      }
+
+      if (nextStep && chatFlow[nextStep]) {
+        setCurrentStep(nextStep);
+        const systemMessage: Message = {
+          id: Date.now(),
+          text: chatFlow[nextStep].message,
+          sender: "system",
+          timestamp: new Date().toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
+        };
+
+        setMessages((prev) => [...prev, systemMessage]);
+      }
+
       setIsTyping(false);
     }, 2000);
   };
 
+  // ✅ Corrigido - Função para lidar com sugestões de resposta
+  const handleSuggestionClick = (suggestion: string) => {
+    handleUserResponse(suggestion);
+  };
+
   const handleTurnToggle = () => {
     setTurnMode((prev) => (prev === "hearing" ? "deaf" : "hearing"));
-    if (typeof navigator?.vibrate === 'function') {
-      navigator.vibrate(200); // Vibrate for 200ms on turn change
+    if (typeof navigator?.vibrate === "function") {
+      navigator.vibrate(200);
     }
   };
 
@@ -88,38 +101,34 @@ const Chat = () => {
           <div ref={chatEndRef} />
         </div>
 
-        <div className={`mobile-avatar ${isAvatarExpanded ? 'expanded' : ''}`}>
+        <div className={`mobile-avatar ${isAvatarExpanded ? "expanded" : ""}`}>
           <Button
             variant="ghost"
             size="icon"
             className="absolute top-2 right-2 z-50"
             onClick={() => setIsAvatarExpanded(!isAvatarExpanded)}
           >
-            {isAvatarExpanded ? (
-              <ChevronDown className="h-4 w-4" />
-            ) : (
-              <ChevronUp className="h-4 w-4" />
-            )}
+            {isAvatarExpanded ? <ChevronDown className="h-4 w-4" /> : <ChevronUp className="h-4 w-4" />}
           </Button>
           <AvatarPanel
             currentMessage={currentMessage}
+            currentVideo={chatFlow[currentStep]?.videoId}
             turnMode={turnMode}
             isTranslating={isTranslating}
           />
         </div>
 
-        <Button
-          className="mobile-scroll-button"
-          size="icon"
-          onClick={scrollToBottom}
-        >
+        <Button className="mobile-scroll-button" size="icon" onClick={scrollToBottom}>
           <ArrowDown className="h-4 w-4" />
         </Button>
 
         <div className="mobile-controls">
           <InteractionPanel
-            onSuggestionClick={handleSuggestionClick}
-            onSendMessage={handleSendMessage}
+            suggestions={chatFlow[currentStep]?.suggestions || []}
+            inputType={chatFlow[currentStep]?.inputType || "buttons"}
+            onUserResponse={handleUserResponse}
+            onSuggestionClick={handleSuggestionClick} // ✅ Correção feita aqui
+            onSendMessage={handleUserResponse} // ✅ Correção feita aqui
           />
         </div>
       </div>
@@ -128,33 +137,33 @@ const Chat = () => {
 
   return (
     <div className="flex h-screen bg-background w-100">
-      {/* Área de chat e controle principal */}
       <div className="flex-1 flex flex-col relative">
         <div className="p-4 border-b bg-background">
           <TurnToggle currentTurn={turnMode} onToggle={handleTurnToggle} />
         </div>
         <div className="flex-1 overflow-y-auto pb-[100px]">
           <ChatArea messages={messages} isTyping={isTyping} />
-          {/* Caixa flutuante para o InteractionPanel */}
           <div className="fixed bottom-0 left-1/2 transform -translate-x-1/2 z-10 flex w-full">
             <InteractionPanel
-              onSuggestionClick={handleSuggestionClick}
-              onSendMessage={handleSendMessage}
+              suggestions={chatFlow[currentStep]?.suggestions || []}
+              inputType={chatFlow[currentStep]?.inputType || "buttons"}
+              onUserResponse={handleUserResponse}
+              onSuggestionClick={handleSuggestionClick} // ✅ Correção feita aqui
+              onSendMessage={handleUserResponse} // ✅ Correção feita aqui
             />
           </div>
         </div>
       </div>
-      {/* Painel lateral de Avatar */}
       <div className="w-80">
-        <AvatarPanel 
+        <AvatarPanel
           currentMessage={currentMessage}
+          currentVideo={chatFlow[currentStep]?.videoId}
           turnMode={turnMode}
           isTranslating={isTranslating}
         />
       </div>
     </div>
   );
-  
 };
 
 export default Chat;
