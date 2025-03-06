@@ -1,20 +1,23 @@
 import { Button } from "./ui/button";
+import { Play } from "lucide-react"; // Ícone de play
 import { useIsMobile } from "@/hooks/use-mobile";
 
 interface InteractionPanelProps {
   suggestions?: string[];
   inputType?: "text" | "buttons";
   onUserResponse: (userInput: string) => void;
-  onSuggestionClick: (suggestion: string) => void;  // ✅ Corrigido
-  onSendMessage: (message: string) => void;  // ✅ Corrigido
+  onSuggestionClick: (suggestion: string) => void;
+  onSendMessage: (message: string) => void;
+  onPreviewVideo: (videoUrl: string) => void; // ✅ Nova função para pré-visualizar vídeo
 }
 
 export const InteractionPanel = ({
-  suggestions = [],  // ✅ Evita erro caso não haja sugestões
+  suggestions = [],
   inputType = "buttons",
   onUserResponse,
   onSuggestionClick,
   onSendMessage,
+  onPreviewVideo, // ✅ Adicionamos essa função
 }: InteractionPanelProps) => {
   const isMobile = useIsMobile();
 
@@ -34,13 +37,22 @@ export const InteractionPanel = ({
         {inputType === "buttons" && (
           <div className="mobile-suggestions">
             {suggestions.map((suggestion) => (
-              <button
-                key={suggestion}
-                className="mobile-suggestion-button"
-                onClick={() => onSuggestionClick(suggestion)}
-              >
-                {suggestion}
-              </button>
+              <div key={suggestion} className="flex items-center gap-2">
+                {suggestion === "Sou visitante" && (
+                  <button
+                    onClick={() => onPreviewVideo("https://player.vimeo.com/video/1063283439")} // 🚨 Link correto
+                    className="p-2 bg-gray-200 rounded-full hover:bg-gray-300 transition"
+                  >
+                    <Play className="h-5 w-5" />
+                  </button>
+                )}
+                <button
+                  className="mobile-suggestion-button"
+                  onClick={() => onSuggestionClick(suggestion)}
+                >
+                  {suggestion}
+                </button>
+              </div>
             ))}
           </div>
         )}
@@ -68,13 +80,22 @@ export const InteractionPanel = ({
         {inputType === "buttons" && (
           <div className="flex">
             {suggestions.map((suggestion) => (
-              <button
-                key={suggestion}
-                className="suggestion-button"
-                onClick={() => onSuggestionClick(suggestion)}
-              >
-                {suggestion}
-              </button>
+              <div key={suggestion} className="flex items-center gap-2">
+                {suggestion === "Sou visitante" && (
+                  <button
+                    onClick={() => onPreviewVideo("https://player.vimeo.com/video/1063283439")} // 🚨 Link correto
+                    className="p-2 bg-gray-200 rounded-full hover:bg-gray-300 transition"
+                  >
+                    <Play className="h-5 w-5" />
+                  </button>
+                )}
+                <button
+                  className="suggestion-button"
+                  onClick={() => onSuggestionClick(suggestion)}
+                >
+                  {suggestion}
+                </button>
+              </div>
             ))}
           </div>
         )}
