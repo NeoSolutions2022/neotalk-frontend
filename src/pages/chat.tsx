@@ -169,7 +169,7 @@ const Chat = () => {
         </div>
 
         <div className={`mobile-avatar ${isAvatarExpanded ? // Se expandido, ocupa a tela inteira
-          "absolute bottom-15 right-0 w-[40vw] h-[40vh] bg-white"
+          "absolute bottom-1 right-0 w-[28vw] h-[40vh] bg-white"
           : // Se não expandido, mantém altura parcial
           "relative h-[100vh] w-full bg-white"}`}>
           <Button
