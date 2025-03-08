@@ -77,60 +77,8 @@ const Chat = () => {
     setTimeout(() => {
       const step: ChatStep = chatFlow[currentStep];
       let nextStep = step.nextStep || null;
-      if (nextStep === "aguarde_processamento") {
-        setCurrentStep("aguarde_processamento");
-        setMessages((prev) => [
-          ...prev,
-          {
-            id: Date.now(),
-            text: chatFlow.aguarde_processamento.message,
-            sender: "system",
-            timestamp: new Date().toLocaleTimeString([], {
-              hour: "2-digit",
-              minute: "2-digit",
-            }),
-            videoUrl: chatFlow.aguarde_processamento.videoId || null,
-          },
-        ]);
-      
-        // ✅ AUTOMÁTICO: após 3 segundos, vai direto para entrada_aprovada ou entrada_negada
-        setTimeout(() => {
-          const randomChoice = Math.random() < 0.5 ? "entrada_aprovada" : "entrada_negada";
-      
-          setCurrentStep(randomChoice);
-          setMessages((prev) => [
-            ...prev,
-            {
-              id: Date.now(),
-              text: chatFlow[randomChoice].message,
-              sender: "system",
-              timestamp: new Date().toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-              }),
-              videoUrl: chatFlow[randomChoice].videoId || null,
-            },
-          ]);
-          setIsTyping(false);
-        }, 3000);
-      
-        return; // Impede que o restante do código rode
-      }
-      
-      
-      // Se estivermos em "morador_responde", forçar 50-50
-      if (currentStep === "morador_responde") {
-        // 🔥 Sempre gera aleatório
-        const randomChoice = Math.random() < 0.5 ? "entrada_aprovada" : "entrada_negada";
-        console.log("Random choice para morador_responde:", randomChoice);
-        nextStep = randomChoice;
-      }
-      // Caso contrário, use a lógica normal de nextOptions
-      else if (step.nextOptions) {
-        nextStep = step.nextOptions[userInput] || "inicio";
-      }
 
-      console.log("➡ nextStep:", nextStep);
+      // Se estivermos em "morador_responde", forçar 50-50
       if (nextStep && chatFlow[nextStep]) {
         setCurrentStep(nextStep);
         setMessages((prev) => [
