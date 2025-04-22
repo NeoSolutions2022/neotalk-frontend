@@ -1,8 +1,7 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { InteractionPanel } from "@/components/InteractionPanel";
 import { ChatArea } from "@/components/ChatArea";
 import { AvatarPanel } from "@/components/AvatarPanel";
-import { Play } from "lucide-react";
 import { chatFlow } from "@/config/chatFlow";
 import { Message } from "@/types";
 import { ChevronDown, ChevronUp } from "lucide-react";
@@ -28,36 +27,19 @@ const Chat = () => {
   const [isTyping, setIsTyping] = useState(false);
   const [previewVideo, setPreviewVideo] = useState<string | null>(null);
   const [isAvatarExpanded, setIsAvatarExpanded] = useState(false);
+  const [page, setPage] = useState(0);
   const chatEndRef = useRef<HTMLDivElement>(null);
   const isMobile = useIsMobile();
+
+  // Reset pagination when step changes
+  useEffect(() => {
+    setPage(0);
+  }, [currentStep]);
 
   const handlePreviewVideo = (videoUrl: string) => {
     setPreviewVideo((prev) => (prev === videoUrl ? null : videoUrl));
   };
 
-  const renderMessageWithPlay = (message: Message) => {
-    const stepKey = Object.keys(chatFlow).find(
-      (key) => chatFlow[key].message === message.text
-    ) as keyof typeof chatFlow | undefined;
-    const step = stepKey ? chatFlow[stepKey] : undefined;
-    const videoUrl = step?.previewVideoId || step?.videoId || null;
-
-    return (
-      <div key={message.id} className="flex items-center gap-2 p-2">
-        {videoUrl && (
-          <button
-            onClick={() => handlePreviewVideo(videoUrl)}
-            className="p-2 bg-gray-200 rounded-full hover:bg-gray-300 transition"
-          >
-            <Play className="h-5 w-5" />
-          </button>
-        )}
-        <span>{message.text}</span>
-      </div>
-    );
-  };
-
-  // Clique em texto livre (inputType === "text")
   const handleUserResponse = (userInput: string) => {
     setMessages((prev) => [
       ...prev,
@@ -75,10 +57,7 @@ const Chat = () => {
 
     setTimeout(() => {
       const step = chatFlow[currentStep];
-      const nextKey =
-        step.inputType === "buttons" && step.nextOptions
-          ? step.nextOptions[userInput]
-          : step.nextStep;
+      const nextKey = step.nextStep;
 
       if (!nextKey || !chatFlow[nextKey]) {
         setIsTyping(false);
@@ -86,8 +65,7 @@ const Chat = () => {
       }
 
       const next = chatFlow[nextKey];
-      setCurrentStep(nextKey);
-
+      setCurrentStep(nextKey as keyof typeof chatFlow);
       setMessages((prev) => [
         ...prev,
         {
@@ -101,44 +79,66 @@ const Chat = () => {
           videoUrl: next.videoId || null,
         },
       ]);
-
       setPreviewVideo(null);
       setIsTyping(false);
-    }, 1000);
+    }, 800);
   };
 
-  // Clique em sugestão: **não** ecoa a sugestão como mensagem do usuário,
-  // apenas avança o fluxo e exibe a próxima mensagem do sistema.
   const handleSuggestionClick = (suggestion: string) => {
-    const step = chatFlow[currentStep];
-    const nextKey =
-      step.inputType === "buttons" && step.nextOptions
-        ? step.nextOptions[suggestion]
-        : step.nextStep;
-
-    if (!nextKey || !chatFlow[nextKey]) {
-      return;
-    }
-
-    const next = chatFlow[nextKey];
-    setCurrentStep(nextKey);
     setMessages((prev) => [
       ...prev,
       {
         id: Date.now(),
-        text: next.message,
-        sender: "system",
+        text: suggestion,
+        sender: "user",
         timestamp: new Date().toLocaleTimeString([], {
           hour: "2-digit",
           minute: "2-digit",
         }),
-        videoUrl: next.videoId || null,
       },
     ]);
-    setPreviewVideo(null);
+    setIsTyping(true);
+
+    setTimeout(() => {
+      let nextKey: string | undefined;
+      const step = chatFlow[currentStep];
+
+      if (step.inputType === "buttons" && step.nextOptions) {
+        nextKey = step.nextOptions[suggestion];
+      } else {
+        nextKey = step.nextStep;
+      }
+
+      if (!nextKey || !chatFlow[nextKey]) {
+        setIsTyping(false);
+        return;
+      }
+
+      const next = chatFlow[nextKey];
+      setCurrentStep(nextKey as keyof typeof chatFlow);
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: Date.now(),
+          text: next.message,
+          sender: "system",
+          timestamp: new Date().toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
+          videoUrl: next.videoId || null,
+        },
+      ]);
+      setPreviewVideo(null);
+      setIsTyping(false);
+    }, 800);
   };
 
-  // layout mobile
+  const currentConfig = chatFlow[currentStep];
+  const suggestions = currentConfig.suggestions || [];
+  const nextOptions = currentConfig.nextOptions || {};
+
+  // Mobile layout
   if (isMobile) {
     return (
       <div className="mobile-layout">
@@ -146,7 +146,6 @@ const Chat = () => {
           <ChatArea
             messages={messages}
             isTyping={isTyping}
-            renderMessage={renderMessageWithPlay}
             onPlayVideo={handlePreviewVideo}
           />
           <div ref={chatEndRef} />
@@ -176,18 +175,21 @@ const Chat = () => {
             currentMessage={
               previewVideo
                 ? "Reproduzindo vídeo..."
-                : chatFlow[currentStep]?.message
+                : currentConfig.message
             }
             currentVideo={
-              previewVideo || chatFlow[currentStep]?.videoId || undefined
+              previewVideo || currentConfig.videoId || undefined
             }
           />
         </div>
 
         <div className="mobile-controls">
           <InteractionPanel
-            suggestions={chatFlow[currentStep]?.suggestions || []}
-            inputType={chatFlow[currentStep]?.inputType || "buttons"}
+            suggestions={suggestions}
+            nextOptions={nextOptions}
+            inputType={currentConfig.inputType || "buttons"}
+            page={page}
+            setPage={setPage}
             onUserResponse={handleUserResponse}
             onSuggestionClick={handleSuggestionClick}
             onSendMessage={handleUserResponse}
@@ -198,7 +200,7 @@ const Chat = () => {
     );
   }
 
-  // layout desktop
+  // Desktop layout
   return (
     <div className="flex h-screen bg-background w-100">
       <div className="flex-1 flex flex-col relative">
@@ -206,13 +208,15 @@ const Chat = () => {
           <ChatArea
             messages={messages}
             isTyping={isTyping}
-            renderMessage={renderMessageWithPlay}
             onPlayVideo={handlePreviewVideo}
           />
           <div className="fixed bottom-0 left-1/2 transform -translate-x-1/2 z-10 flex w-full">
             <InteractionPanel
-              suggestions={chatFlow[currentStep]?.suggestions || []}
-              inputType={chatFlow[currentStep]?.inputType || "buttons"}
+              suggestions={suggestions}
+              nextOptions={nextOptions}
+              inputType={currentConfig.inputType || "buttons"}
+              page={page}
+              setPage={setPage}
               onUserResponse={handleUserResponse}
               onSuggestionClick={handleSuggestionClick}
               onSendMessage={handleUserResponse}
@@ -224,10 +228,10 @@ const Chat = () => {
       <div className="w-80">
         <AvatarPanel
           currentMessage={
-            previewVideo ? "Pré‑visualização" : chatFlow[currentStep]?.message
+            previewVideo ? "Pré‑visualização" : currentConfig.message
           }
           currentVideo={
-            previewVideo || chatFlow[currentStep]?.videoId || undefined
+            previewVideo || currentConfig.videoId || undefined
           }
         />
       </div>

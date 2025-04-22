@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { ReactNode } from "react";
 import { Button } from "./ui/button";
 import { Play, ChevronLeft, ChevronRight } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -6,7 +6,10 @@ import { chatFlow } from "@/config/chatFlow";
 
 interface InteractionPanelProps {
   suggestions?: string[];
+  nextOptions?: Record<string, string>;
   inputType?: "text" | "buttons";
+  page: number;
+  setPage: (page: number) => void;
   onUserResponse: (userInput: string) => void;
   onSuggestionClick: (suggestion: string) => void;
   onSendMessage: (message: string) => void;
@@ -15,7 +18,10 @@ interface InteractionPanelProps {
 
 export const InteractionPanel = ({
   suggestions = [],
-  inputType = "buttons",
+  nextOptions = {},
+  inputType = "text",
+  page,
+  setPage,
   onUserResponse,
   onSuggestionClick,
   onSendMessage,
@@ -23,18 +29,16 @@ export const InteractionPanel = ({
 }: InteractionPanelProps) => {
   const isMobile = useIsMobile();
 
-  // Paginação
+  // PAGINAÇÃO
   const perPage = 4;
   const totalPages = Math.ceil(suggestions.length / perPage);
-  const [page, setPage] = useState(0);
   const paged = suggestions.slice(page * perPage, page * perPage + perPage);
 
-  // Busca vídeo para cada sugestão
+  // Busca o vídeo a partir da chave do próximo passo
   const getVideoUrl = (s: string) => {
-    const key = Object.keys(chatFlow).find((k) => chatFlow[k].message === s) as
-      | keyof typeof chatFlow
-      | undefined;
-    const step = key ? chatFlow[key] : undefined;
+    const nextKey = nextOptions[s] as keyof typeof chatFlow | undefined;
+    if (!nextKey) return null;
+    const step = chatFlow[nextKey];
     return step?.previewVideoId || step?.videoId || null;
   };
 
@@ -51,7 +55,7 @@ export const InteractionPanel = ({
   const renderPager = () => (
     <div className="flex items-center gap-2">
       <button
-        onClick={() => setPage((p) => Math.max(p - 1, 0))}
+        onClick={() => setPage(Math.max(page - 1, 0))}
         disabled={page === 0}
         className="p-2 rounded hover:bg-gray-100 disabled:opacity-50"
       >
@@ -59,7 +63,6 @@ export const InteractionPanel = ({
       </button>
 
       {isMobile ? (
-        // no mobile, lista em coluna
         <div className="flex flex-col gap-2 flex-1">
           {paged.map((s) => {
             const url = getVideoUrl(s);
@@ -67,7 +70,7 @@ export const InteractionPanel = ({
               <div key={s} className="flex items-center gap-2">
                 {url && (
                   <button
-                    onClick={() => onPreviewVideo(url!)}
+                    onClick={() => onPreviewVideo(url)}
                     className="p-2 bg-gray-200 rounded-full hover:bg-gray-300 transition"
                   >
                     <Play className="h-5 w-5" />
@@ -84,7 +87,6 @@ export const InteractionPanel = ({
           })}
         </div>
       ) : (
-        // no desktop, grid 2x2
         <div className="grid grid-cols-2 gap-2 flex-1">
           {paged.map((s) => {
             const url = getVideoUrl(s);
@@ -92,7 +94,7 @@ export const InteractionPanel = ({
               <div key={s} className="flex items-center gap-2">
                 {url && (
                   <button
-                    onClick={() => onPreviewVideo(url!)}
+                    onClick={() => onPreviewVideo(url)}
                     className="p-2 bg-gray-200 rounded-full hover:bg-gray-300 transition"
                   >
                     <Play className="h-5 w-5" />
@@ -111,7 +113,7 @@ export const InteractionPanel = ({
       )}
 
       <button
-        onClick={() => setPage((p) => Math.min(p + 1, totalPages - 1))}
+        onClick={() => setPage(Math.min(page + 1, totalPages - 1))}
         disabled={page >= totalPages - 1}
         className="p-2 rounded hover:bg-gray-100 disabled:opacity-50"
       >
@@ -121,7 +123,6 @@ export const InteractionPanel = ({
   );
 
   if (inputType === "text") {
-    // input de texto segue igual
     return (
       <div className="p-4 border-t">
         <form onSubmit={handleSubmit} className="flex gap-2">
@@ -139,6 +140,5 @@ export const InteractionPanel = ({
     );
   }
 
-  // se for buttons, renderiza o pager com grid de 4
   return <div className="p-4">{renderPager()}</div>;
 };
